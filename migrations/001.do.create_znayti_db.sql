@@ -84,6 +84,10 @@ CREATE TABLE address (
   latitude DOUBLE PRECISION NOT NULL
 );
 
+ALTER TABLE business
+  ADD COLUMN
+    address_id UUID REFERENCES address(address_id) NOT NULL UNIQUE;
+
 -- Created enum for the days of the week
 CREATE TYPE days_of_week AS ENUM (
   'Sunday', 
@@ -95,10 +99,14 @@ CREATE TYPE days_of_week AS ENUM (
   'Saturday'
 );
 
--- Created hours table, pl is the business id
+-- Created hours table, pk is the business id
 CREATE TABLE hours (
   business_id UUID PRIMARY KEY REFERENCES business(business_id) NOT NULL,
   day_of_week days_of_week NOT NULL,
   opens TIME NOT NULL,
   closes TIME NOT NULL
 );
+
+ALTER TABLE business
+  ADD COLUMN
+    hours_id UUID REFERENCES hours(business_id) NOT NULL UNIQUE;
