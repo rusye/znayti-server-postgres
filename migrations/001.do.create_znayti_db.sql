@@ -11,7 +11,8 @@ CREATE TABLE business (
   contact_name VARCHAR(100) NOT NULL,
   category_id UUID REFERENCES category(category_id) ON DELETE CASCADE NOT NULL,
   google_place VARCHAR(100) NOT NULL,
-  telephone VARCHAR(10) NOT NULL
+  telephone VARCHAR(10) NOT NULL,
+  deleted_on TIMESTAMPTZ DEFAULT now()
 );
 
 -- Created an enum that has states and us territories
@@ -86,7 +87,7 @@ CREATE TABLE address (
 
 ALTER TABLE business
   ADD COLUMN
-    address_id UUID REFERENCES address(address_id) NOT NULL UNIQUE;
+    address_id UUID REFERENCES address(business_id) NOT NULL UNIQUE;
 
 -- Created enum for the days of the week
 CREATE TYPE days_of_week AS ENUM (
