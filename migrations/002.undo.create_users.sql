@@ -1,3 +1,4 @@
+ALTER TABLE business DROP COLUMN IF EXISTS average_rating;
 ALTER TABLE business DROP COLUMN IF EXISTS review_count;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS site_user;

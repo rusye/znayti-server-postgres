@@ -24,3 +24,8 @@ CREATE TABLE review (
   review_date TIMESTAMPTZ DEFAULT now() NOT NULL,
   deleted_on TIMESTAMPTZ DEFAULT now()
 );
+
+-- Add average rating column to business table
+ALTER TABLE business
+  ADD COLUMN
+    average_rating NUMERIC(2, 1) NOT NULL;
