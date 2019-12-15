@@ -7,6 +7,7 @@ CREATE TABLE category (
 -- Create the business
 CREATE TABLE business (
   business_id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+  visual_id VARCHAR(100) NOT NULL,
   business_name VARCHAR(100) NOT NULL,
   contact_name VARCHAR(100) NOT NULL,
   category_id UUID REFERENCES category(category_id) ON DELETE CASCADE NOT NULL,
