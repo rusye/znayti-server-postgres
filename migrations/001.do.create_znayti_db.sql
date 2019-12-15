@@ -4,18 +4,6 @@ CREATE TABLE category (
   category_name VARCHAR(50) NOT NULL UNIQUE
 );
 
--- Create the business
-CREATE TABLE business (
-  business_id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-  visual_id VARCHAR(100) NOT NULL,
-  business_name VARCHAR(100) NOT NULL,
-  contact_name VARCHAR(100) NOT NULL,
-  category_id UUID REFERENCES category(category_id) ON DELETE CASCADE NOT NULL,
-  google_place VARCHAR(100) NOT NULL,
-  telephone VARCHAR(10) NOT NULL,
-  deleted_on TIMESTAMPTZ DEFAULT now()
-);
-
 -- Created an enum that has states and us territories
 CREATE TYPE states AS ENUM (
   'AL',
@@ -75,9 +63,9 @@ CREATE TYPE states AS ENUM (
   'WY'
 );
 
--- Created address table, pk is the business id
+-- Created address table
 CREATE TABLE address (
-  business_id UUID PRIMARY KEY REFERENCES business(business_id) NOT NULL,
+  address_id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
   street VARCHAR(50) NOT NULL,
   city VARCHAR(50) NOT NULL,
   state states NOT NULL,
@@ -85,10 +73,6 @@ CREATE TABLE address (
   longitude DOUBLE PRECISION NOT NULL,
   latitude DOUBLE PRECISION NOT NULL
 );
-
-ALTER TABLE business
-  ADD COLUMN
-    address_id UUID REFERENCES address(business_id) NOT NULL UNIQUE;
 
 -- Created enum for the days of the week
 CREATE TYPE days_of_week AS ENUM (
@@ -103,12 +87,22 @@ CREATE TYPE days_of_week AS ENUM (
 
 -- Created hours table, pk is the business id
 CREATE TABLE hours (
-  business_id UUID PRIMARY KEY REFERENCES business(business_id) NOT NULL,
+  hours_id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
   day_of_week days_of_week NOT NULL,
   opens TIME NOT NULL,
   closes TIME NOT NULL
 );
 
-ALTER TABLE business
-  ADD COLUMN
-    hours_id UUID REFERENCES hours(business_id) NOT NULL UNIQUE;
+-- Create the business
+CREATE TABLE business (
+  business_id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+  visual_id VARCHAR(100) NOT NULL,
+  business_name VARCHAR(100) NOT NULL,
+  contact_name VARCHAR(100) NOT NULL,
+  category_id UUID REFERENCES category(category_id) ON DELETE CASCADE NOT NULL,
+  address_id UUID REFERENCES address(address_id) UNIQUE NOT NULL,
+  hours_id UUID REFERENCES hours(hours_id) UNIQUE NOT NULL,
+  google_place VARCHAR(100) NOT NULL,
+  telephone VARCHAR(10) NOT NULL,
+  deleted_on TIMESTAMPTZ DEFAULT now()
+);
