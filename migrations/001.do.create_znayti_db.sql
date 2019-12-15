@@ -1,6 +1,6 @@
 -- Create the category table, it depends on no other
 CREATE TABLE category (
-  category_id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+  id SERIAL PRIMARY KEY NOT NULL,
   category_name VARCHAR(50) NOT NULL UNIQUE
 );
 
@@ -65,7 +65,7 @@ CREATE TYPE states AS ENUM (
 
 -- Created address table
 CREATE TABLE address (
-  address_id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+  id SERIAL PRIMARY KEY NOT NULL,
   street VARCHAR(50) NOT NULL,
   suite VARCHAR(10),
   city VARCHAR(50) NOT NULL,
@@ -88,7 +88,7 @@ CREATE TYPE days_of_week AS ENUM (
 
 -- Created hours table, pk is the business id
 CREATE TABLE hours (
-  hours_id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+  id SERIAL PRIMARY KEY NOT NULL,
   day_of_week days_of_week NOT NULL,
   opens TIME NOT NULL,
   closes TIME NOT NULL
@@ -96,13 +96,13 @@ CREATE TABLE hours (
 
 -- Create the business
 CREATE TABLE business (
-  business_id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-  visual_id VARCHAR(100) NOT NULL,
+  id SERIAL PRIMARY KEY NOT NULL,
+  visual_id VARCHAR(100) NOT NULL UNIQUE,
   business_name VARCHAR(100) NOT NULL,
   contact_name VARCHAR(100) NOT NULL,
-  category_id UUID REFERENCES category(category_id) ON DELETE CASCADE NOT NULL,
-  address_id UUID REFERENCES address(address_id) UNIQUE NOT NULL,
-  hours_id UUID REFERENCES hours(hours_id) UNIQUE NOT NULL,
+  category_id INTEGER REFERENCES category(id) ON DELETE CASCADE NOT NULL,
+  address_id INTEGER REFERENCES address(id) UNIQUE NOT NULL,
+  hours_id INTEGER REFERENCES hours(id) NOT NULL,
   google_place VARCHAR(100) NOT NULL,
   telephone VARCHAR(10) NOT NULL,
   deleted_on TIMESTAMPTZ DEFAULT now()
