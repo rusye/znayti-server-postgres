@@ -7,6 +7,8 @@ const { NODE_ENV } = require("./config");
 const errorHandler = require("./error-handler");
 const validateBearerToken = require("./validate-bearer-token");
 
+const businessRouter = require("./businesses/businesses-router");
+
 const app = express();
 
 app.use(
@@ -22,6 +24,8 @@ app.use(validateBearerToken);
 app.get("/", (req, res) => {
   res.send("Hello, boilerplate!");
 });
+
+app.use("/api/businesses", businessRouter);
 
 app.use(errorHandler);
 
