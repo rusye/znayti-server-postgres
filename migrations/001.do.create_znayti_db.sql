@@ -67,6 +67,7 @@ CREATE TYPE states AS ENUM (
 CREATE TABLE address (
   address_id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
   street VARCHAR(50) NOT NULL,
+  suite VARCHAR(10),
   city VARCHAR(50) NOT NULL,
   state states NOT NULL,
   zipcode VARCHAR(10) NOT NULL,
