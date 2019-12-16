@@ -101,7 +101,7 @@ CREATE TABLE business (
   business_name VARCHAR(100) NOT NULL,
   contact_name VARCHAR(100) NOT NULL,
   category_id INTEGER REFERENCES category(id) ON DELETE CASCADE NOT NULL,
-  address_id INTEGER REFERENCES address(id) UNIQUE NOT NULL,
+  address_id INTEGER REFERENCES address(id) NOT NULL,
   hours_id INTEGER REFERENCES hours(id) NOT NULL,
   google_place VARCHAR(100) NOT NULL,
   telephone VARCHAR(10) NOT NULL,
