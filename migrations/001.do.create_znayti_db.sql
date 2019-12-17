@@ -80,7 +80,7 @@ CREATE TABLE business (
   id SERIAL PRIMARY KEY NOT NULL,
   visual_id VARCHAR(100) NOT NULL UNIQUE,
   business_name VARCHAR(100) NOT NULL,
-  contact_name VARCHAR(100) NOT NULL,
+  contact_name VARCHAR(100),
   category_id INTEGER REFERENCES category(id) ON DELETE CASCADE NOT NULL,
   address_id INTEGER REFERENCES address(id) NOT NULL,
   google_place VARCHAR(100) NOT NULL,
