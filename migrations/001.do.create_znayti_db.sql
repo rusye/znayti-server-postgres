@@ -85,7 +85,7 @@ CREATE TABLE business (
   address_id INTEGER REFERENCES address(id) NOT NULL,
   google_place VARCHAR(100) NOT NULL,
   telephone VARCHAR(10) NOT NULL,
-  deleted_on TIMESTAMPTZ DEFAULT now()
+  deleted_on TIMESTAMPTZ
 );
 
 -- Created enum for the days of the week
