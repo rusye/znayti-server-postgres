@@ -58,6 +58,34 @@ const makeZnaytiArrays = {
         contact_name: "Joe"
       }
     ];
+  },
+  testHours() {
+    return [
+      {
+        id: 2,
+        day_of_week: "Monday",
+        opens: "08:00:00",
+        closes: "17:00:00"
+      },
+      {
+        id: 2,
+        day_of_week: "Tuesday",
+        opens: "08:00:00",
+        closes: "17:00:00"
+      },
+      {
+        id: 1,
+        day_of_week: "Wednesday",
+        opens: "08:00:00",
+        closes: "17:00:00"
+      },
+      {
+        id: 1,
+        day_of_week: "Thursday",
+        opens: "08:00:00",
+        closes: "17:00:00"
+      }
+    ]
   }
 };
 
