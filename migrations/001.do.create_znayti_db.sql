@@ -101,7 +101,7 @@ CREATE TYPE days_of_week AS ENUM (
 
 -- Created hours table, pk is the business id
 CREATE TABLE hours (
-  business_id INTEGER REFERENCES business(id) PRIMARY KEY NOT NULL,
+  id INTEGER REFERENCES business(id) NOT NULL,
   day_of_week days_of_week NOT NULL,
   opens TIME NOT NULL,
   closes TIME NOT NULL
