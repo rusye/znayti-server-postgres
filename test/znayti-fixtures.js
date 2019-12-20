@@ -16,20 +16,20 @@ const makeZnaytiArrays = {
       {
         id: 1,
         street: "123 Main St.",
-        suite: 101,
+        suite: "101",
         city: "Portland",
         state: "OR",
-        zipcode: 97236,
+        zipcode: "97236",
         longitude: 45.0,
         latitude: 122.0
       },
       {
         id: 2,
         street: "456 Main St.",
-        suite: 202,
+        suite: "202",
         city: "Gresham",
         state: "OR",
-        zipcode: 97030,
+        zipcode: "97030",
         longitude: 46.0,
         latitude: 123.0
       }
