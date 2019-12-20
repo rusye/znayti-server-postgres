@@ -1,6 +1,6 @@
 -- Create the user table, it depends on no other
 CREATE TABLE site_user (
-  id SERIAL PRIMARY KEY NOT NULL,
+  id SERIAL PRIMARY KEY,
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
   username VARCHAR(25) NOT NULL UNIQUE,
@@ -11,7 +11,7 @@ CREATE TABLE site_user (
 
 -- Create a review table to requires the business and user id
 CREATE TABLE review (
-  id SERIAL PRIMARY KEY NOT NULL,
+  id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES site_user(id) NOT NULL,
   business_id INTEGER REFERENCES business(id) NOT NULL,
   address_id INTEGER REFERENCES address(id) NOT NULL,

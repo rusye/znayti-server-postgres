@@ -1,6 +1,6 @@
 -- Create the category table, it depends on no other
 CREATE TABLE category (
-  id SERIAL PRIMARY KEY NOT NULL,
+  id SERIAL PRIMARY KEY,
   category_name VARCHAR(50) NOT NULL UNIQUE
 );
 
@@ -65,7 +65,7 @@ CREATE TYPE states AS ENUM (
 
 -- Created address table
 CREATE TABLE address (
-  id SERIAL PRIMARY KEY NOT NULL,
+  id SERIAL PRIMARY KEY,
   street VARCHAR(50) NOT NULL,
   suite VARCHAR(10),
   city VARCHAR(50) NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE address (
 
 -- Create the business
 CREATE TABLE business (
-  id SERIAL PRIMARY KEY NOT NULL,
+  id SERIAL PRIMARY KEY,
   visual_id VARCHAR(100) NOT NULL UNIQUE,
   business_name VARCHAR(100) NOT NULL,
   contact_name VARCHAR(100),
