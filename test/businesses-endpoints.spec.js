@@ -23,7 +23,7 @@ describe("Businesses Endpoints", () => {
 
   after("disconnect from db", () => db.destroy());
 
-  describe.only("GET /api/businesses", () => {
+  describe("GET /api/businesses", () => {
     context("Given no businesses", () => {
       it("Responds with 200 and an empty list", () => {
         return supertest(app)
@@ -43,14 +43,26 @@ describe("Businesses Endpoints", () => {
           })
           .then(() => {
             return db.into("business").insert(testInserts.testBusinesses());
+          })
+          .then(() => {
+            return db.into("hours").insert(testInserts.testHours());
           });
       });
 
-      const testBusinessesSerilize = businesses => ({
-        ...businesses,
+      const findObject = (testArray, id) => {
+        return testArray().filter(obj => obj.id === id);
+      };
+
+      const testBusinessesSerilize = business => ({
+        ...findObject(testInserts.testAddresses, business.address_id)[0],
+        ...findObject(testInserts.testCategories, business.category_id)[0],
+        ...business,
         review_count: 0,
         average_rating: null,
-        deleted_on: null
+        deleted_on: null,
+        hours: findObject(testInserts.testHours, business.id),
+        a_id: business.address_id,
+        c_id: business.category_id
       });
 
       const expectedBusinessesResult = testInserts
