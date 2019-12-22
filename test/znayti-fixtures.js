@@ -72,7 +72,7 @@ const makeZnaytiArrays = {
         visual_id: "Some stuff 789",
         business_name: "New Business 3",
         category_id: 2,
-        address_id: 1,
+        address_id: 3,
         google_place: "Some Google Place 789",
         telephone: "1234567890",
         contact_name: "Joe"
