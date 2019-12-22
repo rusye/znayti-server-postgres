@@ -10,7 +10,12 @@ businessesRouter
   .route("/")
 
   .get((req, res, next) => {
-    BusinessesService.getAllBusinesses(req.app.get("db"))
+    BusinessesService.getAllBusinesses(
+      req.app.get("db"),
+      req.query.lat,
+      req.query.long,
+      req.query.rad
+    )
       .then(businesses => {
         res.json(businesses);
       })
