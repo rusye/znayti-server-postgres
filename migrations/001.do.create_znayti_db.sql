@@ -75,6 +75,8 @@ CREATE TABLE address (
   latitude DOUBLE PRECISION NOT NULL
 );
 
+CREATE INDEX address_lat_long ON address USING gist (ll_to_earth(latitude, longitude));
+
 -- Create the business
 CREATE TABLE business (
   id SERIAL PRIMARY KEY,
@@ -106,3 +108,5 @@ CREATE TABLE hours (
   opens TIME NOT NULL,
   closes TIME NOT NULL
 );
+
+CREATE INDEX hours_id_index ON hours (id, day_of_week ASC);
