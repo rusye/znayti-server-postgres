@@ -31,6 +31,28 @@ describe("Businesses Endpoints", () => {
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(200, []);
       });
+
+      const requiredParams = ["long", "lat", "rad"];
+
+      requiredParams.forEach(param => {
+        const newParams = { long: "-122.674396", lat: "45.545708", rad: "10" };
+        delete newParams[param];
+
+        const queryString = Object.entries(newParams)
+          .map(([key, value]) => {
+            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+          })
+          .join("&");
+
+        it(`It responds with 400 missing ${param} if not supplied`, () => {
+          return supertest(app)
+            .get(`/api/businesses/?${queryString}`)
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(400, {
+              error: { message: `Missing '${param}' in request params` }
+            });
+        });
+      });
     });
 
     context("Given there are businesses in the database", () => {
