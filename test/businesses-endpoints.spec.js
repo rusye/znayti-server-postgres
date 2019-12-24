@@ -1,6 +1,6 @@
 const knex = require("knex");
 const app = require("../src/app");
-const testInserts = require("./znayti-fixtures");
+const fixtures = require("./znayti-fixtures");
 
 describe("Businesses Endpoints", () => {
   let db;
@@ -71,39 +71,45 @@ describe("Businesses Endpoints", () => {
     });
 
     context("Given there are businesses in the database", () => {
+      const {
+        testCategories,
+        testAddresses,
+        testBusinesses,
+        testHours
+      } = fixtures.makeZnaytiArrays();
+
       beforeEach("insert categories, addresses, hours, and businesses", () => {
         return db
           .into("category")
-          .insert(testInserts.testCategories())
+          .insert(testCategories)
           .then(() => {
-            return db.into("address").insert(testInserts.testAddresses());
+            return db.into("address").insert(testAddresses);
           })
           .then(() => {
-            return db.into("business").insert(testInserts.testBusinesses());
+            return db.into("business").insert(testBusinesses);
           })
           .then(() => {
-            return db.into("hours").insert(testInserts.testHours());
+            return db.into("hours").insert(testHours);
           });
       });
 
       const findObject = (testArray, id) => {
-        return testArray().filter(obj => obj.id === id);
+        return testArray.filter(obj => obj.id === id);
       };
 
       const testBusinessesSerilize = business => ({
-        ...findObject(testInserts.testAddresses, business.address_id)[0],
-        ...findObject(testInserts.testCategories, business.category_id)[0],
+        ...findObject(testAddresses, business.address_id)[0],
+        ...findObject(testCategories, business.category_id)[0],
         ...business,
         review_count: 0,
         average_rating: null,
         deleted_on: null,
-        hours: findObject(testInserts.testHours, business.id),
+        hours: findObject(testHours, business.id),
         a_id: business.address_id,
         c_id: business.category_id
       });
 
-      const expectedBusinessesResult = testInserts
-        .testBusinesses()
+      const expectedBusinessesResult = testBusinesses
         .filter(business => business.id !== 3)
         .map(testBusinessesSerilize);
 
