@@ -10,6 +10,12 @@ businessesRouter
   .route("/")
 
   .get((req, res, next) => {
+    if (req.query.rad > 50) {
+      return res.status(400).json({
+        error: { message: `Radius '${req.query.rad}' is greater than 50` }
+      });
+    }
+
     for (const param of ["long", "lat", "rad"]) {
       if (!req.query[param]) {
         return res

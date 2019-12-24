@@ -53,6 +53,19 @@ describe("Businesses Endpoints", () => {
             });
         });
       });
+
+      const tooLargeRadius = 51;
+
+      it("It responds with 400 radius is too great", () => {
+        return supertest(app)
+          .get(
+            `/api/businesses/?long=-122.674396&lat=45.545708&rad=${tooLargeRadius}&input=Portland, OR`
+          )
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: { message: `Radius '${tooLargeRadius}' is greater than 50` }
+          });
+      });
     });
 
     context("Given there are businesses in the database", () => {
