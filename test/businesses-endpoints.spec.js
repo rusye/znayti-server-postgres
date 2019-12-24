@@ -27,7 +27,9 @@ describe("Businesses Endpoints", () => {
     context("Given no businesses", () => {
       it("Responds with 200 and an empty list", () => {
         return supertest(app)
-          .get("/api/businesses")
+          .get(
+            "/api/businesses/?long=-122.674396&lat=45.545708&rad=10&input=Portland, OR"
+          )
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(200, []);
       });
