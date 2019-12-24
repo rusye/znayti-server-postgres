@@ -70,9 +70,11 @@ describe("Businesses Endpoints", () => {
         .filter(business => business.id !== 3)
         .map(testBusinessesSerilize);
 
-      it("Gets businesses from the database within a 10 miles radius", () => {
+      it("It responds with a 200 and businesses within a 10 miles radius", () => {
         return supertest(app)
-          .get("/api/businesses/?long=-122.674396&lat=45.545708&rad=10&input=Portland, OR")
+          .get(
+            "/api/businesses/?long=-122.674396&lat=45.545708&rad=10&input=Portland, OR"
+          )
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(200, expectedBusinessesResult);
       });
