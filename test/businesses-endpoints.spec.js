@@ -122,5 +122,38 @@ describe("Businesses Endpoints", () => {
           .expect(200, expectedBusinessesResult);
       });
     });
+
+    context("Given an XSS attack on business", () => {
+      const {
+        maliciousCategory,
+        maliciousAddress,
+        maliciousBusiness,
+        expectedBusiness
+      } = fixtures.makeMaliciousBusiness();
+
+      beforeEach(
+        "Insert a malicious business and anything associated with it",
+        () => {
+          return db
+            .into("category")
+            .insert([maliciousCategory])
+            .then(() => {
+              return db.into("address").insert([maliciousAddress]);
+            })
+            .then(() => {
+              return db.into("business").insert([maliciousBusiness]);
+            });
+        }
+      );
+
+      it("Removes XSS attack content", () => {
+        return supertest(app)
+          .get(
+            "/api/businesses/?long=-122.674396&lat=45.545708&rad=50&input=Portland, OR"
+          )
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(200, [expectedBusiness]);
+      });
+    });
   });
 });

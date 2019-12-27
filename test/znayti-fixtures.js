@@ -118,4 +118,53 @@ function makeZnaytiArrays() {
   return { testCategories, testAddresses, testBusinesses, testHours };
 }
 
-module.exports = { makeZnaytiArrays };
+function makeMaliciousBusiness() {
+  const maliciousCategory = {
+    id: 1,
+    category_name: `Bad Category <script>alert("xss");</script>`
+  };
+  const maliciousAddress = {
+    id: 1,
+    street: '123 Main St. <script>alert("xss");</script>',
+    suite: "101",
+    city: 'Portland <script>alert("xss");</script>',
+    state: "OR",
+    zipcode: "97236",
+    longitude: -122.6786824,
+    latitude: 45.5187539
+  };
+  const maliciousBusiness = {
+    id: 1,
+    visual_id: "Some stuff 123",
+    business_name: 'New Business 1 <script>alert("xss");</script>',
+    category_id: 1,
+    address_id: 1,
+    google_place: "Some Google Place 123",
+    telephone: "1234567890",
+    contact_name: 'Bob <script>alert("xss");</script>'
+  };
+  const expectedBusiness = {
+    category_name: 'Bad Category &lt;script&gt;alert("xss");&lt;/script&gt;',
+    c_id: maliciousBusiness.category_id,
+    ...maliciousAddress,
+    street: '123 Main St. &lt;script&gt;alert("xss");&lt;/script&gt;',
+    city: 'Portland &lt;script&gt;alert("xss");&lt;/script&gt;',
+    a_id: maliciousBusiness.address_id,
+    ...maliciousBusiness,
+    business_name: 'New Business 1 &lt;script&gt;alert("xss");&lt;/script&gt;',
+    contact_name: 'Bob &lt;script&gt;alert("xss");&lt;/script&gt;',
+    review_count: 0,
+    average_rating: null,
+    deleted_on: null,
+    hours: [null]
+  };
+
+  return {
+    maliciousCategory,
+    maliciousAddress,
+    maliciousBusiness,
+    expectedBusiness
+  };
+}
+
+module.exports = { makeZnaytiArrays, makeMaliciousBusiness };

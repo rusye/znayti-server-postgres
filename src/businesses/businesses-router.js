@@ -1,10 +1,20 @@
 "use strict";
 
 const express = require("express");
+const xss = require("xss");
 
 const BusinessesService = require("./businesses-service");
 
 const businessesRouter = express.Router();
+
+const serializeBusiness = business => ({
+  ...business,
+  category_name: xss(business.category_name),
+  street: xss(business.street),
+  city: xss(business.city),
+  business_name: xss(business.business_name),
+  contact_name: xss(business.contact_name)
+});
 
 businessesRouter
   .route("/")
@@ -31,7 +41,7 @@ businessesRouter
       req.query.rad
     )
       .then(businesses => {
-        res.json(businesses);
+        res.json(businesses.map(serializeBusiness));
       })
       .catch(next);
   });
