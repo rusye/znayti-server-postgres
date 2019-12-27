@@ -12,7 +12,7 @@ const BusinessesService = {
       .from("business")
       .join("address", "business.address_id", "=", "address.id")
       .join("category", "business.category_id", "=", "category.id")
-      .join("hours", "business.id", "=", "hours.id")
+      .leftJoin("hours", "business.id", "=", "hours.id")
       .where(
         knex.raw(
           `earth_distance(ll_to_earth(${lat}, ${long}), ll_to_earth(address.latitude, address.longitude)) < ${rad} * 1609.344`
