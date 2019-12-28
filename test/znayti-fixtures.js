@@ -46,7 +46,7 @@ function makeZnaytiArrays() {
   const testBusinesses = [
     {
       id: 1,
-      visual_id: "Some stuff 123",
+      visual_id: "new-business-1-123456",
       business_name: "New Business 1",
       category_id: 1,
       address_id: 2,
@@ -56,7 +56,7 @@ function makeZnaytiArrays() {
     },
     {
       id: 2,
-      visual_id: "Some stuff 456",
+      visual_id: "new-business-2-789012",
       business_name: "New Business 2",
       category_id: 2,
       address_id: 1,
@@ -66,7 +66,7 @@ function makeZnaytiArrays() {
     },
     {
       id: 3,
-      visual_id: "Some stuff 789",
+      visual_id: "new-business-1-345678",
       business_name: "New Business 3",
       category_id: 2,
       address_id: 3,
@@ -135,7 +135,7 @@ function makeMaliciousBusiness() {
   };
   const maliciousBusiness = {
     id: 1,
-    visual_id: "Some stuff 123",
+    visual_id: "new-business-1-123456",
     business_name: 'New Business 1 <script>alert("xss");</script>',
     category_id: 1,
     address_id: 1,
