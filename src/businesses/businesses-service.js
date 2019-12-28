@@ -23,6 +23,11 @@ const BusinessesService = {
         `earth_distance(ll_to_earth(${lat}, ${long}), ll_to_earth(address.latitude, address.longitude)) < ${rad} * 1609.344`
       )
     );
+  },
+  getById(knex, id) {
+    return queryString(knex)
+      .where("visual_id", id)
+      .first();
   }
 };
 
