@@ -75,7 +75,8 @@ describe("Businesses Endpoints", () => {
         testCategories,
         testAddresses,
         testBusinesses,
-        testHours
+        testHours,
+        testBusinessesSerilize
       } = fixtures.makeZnaytiArrays();
 
       beforeEach("insert categories, addresses, hours, and businesses", () => {
@@ -91,22 +92,6 @@ describe("Businesses Endpoints", () => {
           .then(() => {
             return db.into("hours").insert(testHours);
           });
-      });
-
-      const findObject = (testArray, id) => {
-        return testArray.filter(obj => obj.id === id);
-      };
-
-      const testBusinessesSerilize = business => ({
-        ...findObject(testAddresses, business.address_id)[0],
-        ...findObject(testCategories, business.category_id)[0],
-        ...business,
-        review_count: 0,
-        average_rating: null,
-        deleted_on: null,
-        hours: findObject(testHours, business.id),
-        a_id: business.address_id,
-        c_id: business.category_id
       });
 
       const expectedBusinessesResult = testBusinesses
@@ -172,7 +157,8 @@ describe("Businesses Endpoints", () => {
         testCategories,
         testAddresses,
         testBusinesses,
-        testHours
+        testHours,
+        testBusinessesSerilize
       } = fixtures.makeZnaytiArrays();
 
       beforeEach("insert categories, addresses, hours, and businesses", () => {
@@ -192,22 +178,6 @@ describe("Businesses Endpoints", () => {
 
       it("Responds with 200 and the specified business", () => {
         const business_visual_id = "new-business-2-789012";
-
-        const findObject = (testArray, id) => {
-          return testArray.filter(obj => obj.id === id);
-        };
-
-        const testBusinessesSerilize = business => ({
-          ...findObject(testAddresses, business.address_id)[0],
-          ...findObject(testCategories, business.category_id)[0],
-          ...business,
-          review_count: 0,
-          average_rating: null,
-          deleted_on: null,
-          hours: findObject(testHours, business.id),
-          a_id: business.address_id,
-          c_id: business.category_id
-        });
 
         const expectedBusinessesResult = testBusinesses
           .filter(business => business.visual_id === business_visual_id)

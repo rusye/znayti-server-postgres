@@ -115,7 +115,29 @@ function makeZnaytiArrays() {
     }
   ];
 
-  return { testCategories, testAddresses, testBusinesses, testHours };
+  const findObject = (testArray, id) => {
+    return testArray.filter(obj => obj.id === id);
+  };
+
+  const testBusinessesSerilize = business => ({
+    ...findObject(testAddresses, business.address_id)[0],
+    ...findObject(testCategories, business.category_id)[0],
+    ...business,
+    review_count: 0,
+    average_rating: null,
+    deleted_on: null,
+    hours: findObject(testHours, business.id),
+    a_id: business.address_id,
+    c_id: business.category_id
+  });
+
+  return {
+    testCategories,
+    testAddresses,
+    testBusinesses,
+    testHours,
+    testBusinessesSerilize
+  };
 }
 
 function makeMaliciousBusiness() {
