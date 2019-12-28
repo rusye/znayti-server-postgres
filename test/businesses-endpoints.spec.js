@@ -166,5 +166,58 @@ describe("Businesses Endpoints", () => {
           .expect(404, { error: { message: "Business Not Found" } });
       });
     });
+
+    context("Given there are businesses in the database", () => {
+      const {
+        testCategories,
+        testAddresses,
+        testBusinesses,
+        testHours
+      } = fixtures.makeZnaytiArrays();
+
+      beforeEach("insert categories, addresses, hours, and businesses", () => {
+        return db
+          .into("category")
+          .insert(testCategories)
+          .then(() => {
+            return db.into("address").insert(testAddresses);
+          })
+          .then(() => {
+            return db.into("business").insert(testBusinesses);
+          })
+          .then(() => {
+            return db.into("hours").insert(testHours);
+          });
+      });
+
+      it("Responds with 200 and the specified business", () => {
+        const business_visual_id = "new-business-2-789012";
+
+        const findObject = (testArray, id) => {
+          return testArray.filter(obj => obj.id === id);
+        };
+
+        const testBusinessesSerilize = business => ({
+          ...findObject(testAddresses, business.address_id)[0],
+          ...findObject(testCategories, business.category_id)[0],
+          ...business,
+          review_count: 0,
+          average_rating: null,
+          deleted_on: null,
+          hours: findObject(testHours, business.id),
+          a_id: business.address_id,
+          c_id: business.category_id
+        });
+
+        const expectedBusinessesResult = testBusinesses
+          .filter(business => business.visual_id === business_visual_id)
+          .map(testBusinessesSerilize);
+
+        return supertest(app)
+          .get("/api/businesses/new-business-2-789012")
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(200, expectedBusinessesResult[0]);
+      });
+    });
   });
 });
