@@ -25,9 +25,9 @@ const BusinessesService = {
       )
     );
   },
-  getById(knex, id) {
+  getById(knex, visual_id) {
     return queryString(knex)
-      .where("visual_id", id)
+      .where({ visual_id })
       .first();
   }
 };
