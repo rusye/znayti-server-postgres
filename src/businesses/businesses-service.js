@@ -9,6 +9,7 @@ const queryString = knex => {
       knex.raw("array_agg(row_to_json(hours)) as hours")
     )
     .from("business")
+    .whereNull("deleted_on")
     .join("address", "business.address_id", "=", "address.id")
     .join("category", "business.category_id", "=", "category.id")
     .leftJoin("hours", "business.id", "=", "hours.id")
