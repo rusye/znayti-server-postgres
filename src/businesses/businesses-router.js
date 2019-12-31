@@ -69,6 +69,16 @@ businessesRouter
 
   .get((req, res) => {
     res.json(serializeBusiness(res.business));
+  })
+
+  .delete((req, res, next) => {
+    const { business_visual_id } = req.params;
+    BusinessesService.deleteBusiness(req.app.get("db"), business_visual_id)
+      .then(deleted => {
+        logger.info(`Business with visual_id ${business_visual_id} deleted.`);
+        res.status(204).end();
+      })
+      .catch(next);
   });
 
 module.exports = businessesRouter;

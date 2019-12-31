@@ -29,6 +29,11 @@ const BusinessesService = {
     return queryString(knex)
       .where({ visual_id })
       .first();
+  },
+  deleteBusiness(knex, visual_id) {
+    return knex("business")
+      .where({ visual_id })
+      .update("deleted_on", knex.fn.now());
   }
 };
 

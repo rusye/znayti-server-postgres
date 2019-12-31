@@ -190,4 +190,70 @@ describe("Businesses Endpoints", () => {
       });
     });
   });
+
+  describe("DELETE api/businesses/:id", () => {
+    context("Given no business", () => {
+      it("Responds with 404 when the business doesn't exist", () => {
+        return supertest(app)
+          .delete("/api/businesses/some-business-564658")
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(404, { error: { message: "Business Not Found" } });
+      });
+    });
+
+    context("Given there are businesses in the database", () => {
+      const {
+        testCategories,
+        testAddresses,
+        testBusinesses,
+        testHours,
+        testBusinessesSerilize
+      } = fixtures.makeZnaytiArrays();
+
+      beforeEach("insert categories, addresses, hours, and businesses", () => {
+        return db
+          .into("category")
+          .insert(testCategories)
+          .then(() => {
+            return db.into("address").insert(testAddresses);
+          })
+          .then(() => {
+            return db.into("business").insert(testBusinesses);
+          })
+          .then(() => {
+            return db.into("hours").insert(testHours);
+          });
+      });
+
+      it("Removes the business by visual_id from the database", () => {
+        const business_visual_id = "new-business-2-789012";
+
+        const expectedBusinessesResult = testBusinesses
+          .filter(
+            business =>
+              business.visual_id !== business_visual_id && business.id !== 3
+          )
+          .map(testBusinessesSerilize);
+
+        return supertest(app)
+          .delete(`/api/businesses/${business_visual_id}`)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(204)
+          .then(() =>
+            supertest(app)
+              .get(`/api/businesses/${business_visual_id}`)
+              .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+              .expect(404, { error: { message: "Business Not Found" } })
+          )
+          .then(() =>
+            supertest(app)
+              .get(
+                "/api/businesses/?long=-122.674396&lat=45.545708&rad=10&input=Portland, OR"
+              )
+              .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+              .expect(200, expectedBusinessesResult)
+          );
+      });
+    });
+  });
 });
