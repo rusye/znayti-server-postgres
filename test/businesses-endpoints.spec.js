@@ -184,7 +184,7 @@ describe("Businesses Endpoints", () => {
           .map(testBusinessesSerilize);
 
         return supertest(app)
-          .get("/api/businesses/new-business-2-789012")
+          .get(`/api/businesses/${business_visual_id}`)
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(200, expectedBusinessesResult[0]);
       });
