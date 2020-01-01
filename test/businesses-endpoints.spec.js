@@ -23,6 +23,29 @@ describe("Businesses Endpoints", () => {
 
   after("disconnect from db", () => db.destroy());
 
+  const {
+    testCategories,
+    testAddresses,
+    testBusinesses,
+    testHours,
+    testBusinessesSerilize
+  } = fixtures.makeZnaytiArrays();
+
+  const testInsertions = () => {
+    return db
+      .into("category")
+      .insert(testCategories)
+      .then(() => {
+        return db.into("address").insert(testAddresses);
+      })
+      .then(() => {
+        return db.into("business").insert(testBusinesses);
+      })
+      .then(() => {
+        return db.into("hours").insert(testHours);
+      });
+  };
+
   describe("GET /api/businesses", () => {
     context("Given no businesses", () => {
       it("Responds with 200 and an empty list", () => {
@@ -71,28 +94,9 @@ describe("Businesses Endpoints", () => {
     });
 
     context("Given there are businesses in the database", () => {
-      const {
-        testCategories,
-        testAddresses,
-        testBusinesses,
-        testHours,
-        testBusinessesSerilize
-      } = fixtures.makeZnaytiArrays();
-
       beforeEach("insert categories, addresses, hours, and businesses", () => {
-        return db
-          .into("category")
-          .insert(testCategories)
-          .then(() => {
-            return db.into("address").insert(testAddresses);
-          })
-          .then(() => {
-            return db.into("business").insert(testBusinesses);
-          })
-          .then(() => {
-            return db.into("hours").insert(testHours);
+        return testInsertions();
           });
-      });
 
       const expectedBusinessesResult = testBusinesses
         .filter(business => business.id !== 3)
@@ -153,27 +157,8 @@ describe("Businesses Endpoints", () => {
     });
 
     context("Given there are businesses in the database", () => {
-      const {
-        testCategories,
-        testAddresses,
-        testBusinesses,
-        testHours,
-        testBusinessesSerilize
-      } = fixtures.makeZnaytiArrays();
-
       beforeEach("insert categories, addresses, hours, and businesses", () => {
-        return db
-          .into("category")
-          .insert(testCategories)
-          .then(() => {
-            return db.into("address").insert(testAddresses);
-          })
-          .then(() => {
-            return db.into("business").insert(testBusinesses);
-          })
-          .then(() => {
-            return db.into("hours").insert(testHours);
-          });
+        return testInsertions();
       });
 
       it("Responds with 200 and the specified business", () => {
@@ -202,27 +187,8 @@ describe("Businesses Endpoints", () => {
     });
 
     context("Given there are businesses in the database", () => {
-      const {
-        testCategories,
-        testAddresses,
-        testBusinesses,
-        testHours,
-        testBusinessesSerilize
-      } = fixtures.makeZnaytiArrays();
-
       beforeEach("insert categories, addresses, hours, and businesses", () => {
-        return db
-          .into("category")
-          .insert(testCategories)
-          .then(() => {
-            return db.into("address").insert(testAddresses);
-          })
-          .then(() => {
-            return db.into("business").insert(testBusinesses);
-          })
-          .then(() => {
-            return db.into("hours").insert(testHours);
-          });
+        return testInsertions();
       });
 
       it("Removes the business by visual_id from the database", () => {
