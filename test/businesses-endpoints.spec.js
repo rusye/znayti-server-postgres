@@ -146,6 +146,47 @@ describe("Businesses Endpoints", () => {
     });
   });
 
+  describe("POST /api/businesses", () => {
+    beforeEach("insert categories and addresses", () => {
+      return db
+        .into("category")
+        .insert(testCategories)
+        .then(() => {
+          return db.into("address").insert(testAddresses);
+        });
+    });
+
+    [
+      "visual_id",
+      "business_name",
+      "category_id",
+      "address_id",
+      "google_place",
+      "telephone"
+    ].forEach(field => {
+      const newBusiness = {
+        id: 1,
+        visual_id: "new-business-1-123456",
+        business_name: "New Business 1",
+        category_id: 1,
+        address_id: 2,
+        google_place: "Some Google Place 123",
+        telephone: "1234567890",
+        contact_name: "Bob"
+      };
+
+      it(`Responds with 400 missing '${field}' if not supplied`, () => {
+        delete newBusiness[field];
+
+        return supertest(app)
+          .post("/api/businesses/")
+          .send(newBusiness)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, { error: { message: `'${field}' is required` } });
+      });
+    });
+  });
+
   describe("GET /api/businesses/:id", () => {
     context("Given no business", () => {
       it("Responds with 404 when the business doesn't exist", () => {
