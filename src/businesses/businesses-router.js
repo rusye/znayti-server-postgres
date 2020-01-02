@@ -3,6 +3,7 @@
 const express = require("express");
 const xss = require("xss");
 const logger = require("../logger");
+const bodyParser = express.json();
 
 const BusinessesService = require("./businesses-service");
 
@@ -45,6 +46,46 @@ businessesRouter
         res.json(businesses.map(serializeBusiness));
       })
       .catch(next);
+  })
+
+  .post(bodyParser, (req, res, next) => {
+    const {
+      visual_id,
+      business_name,
+      contact_name,
+      category_id,
+      address_id,
+      google_place,
+      telephone,
+      deleted_on
+    } = req.body;
+
+    const newBusiness = {
+      visual_id,
+      business_name,
+      contact_name,
+      category_id,
+      address_id,
+      google_place,
+      telephone,
+      deleted_on
+    };
+
+    for (const field of [
+      "visual_id",
+      "business_name",
+      "category_id",
+      "address_id",
+      "google_place",
+      "telephone"
+    ]) {
+      if (!newBusiness[field]) {
+        logger.error(`${field} is required`);
+        return res.status(400).send({
+          error: { message: `'${field}' is required` }
+        });
+      }
+    }
   });
 
 businessesRouter
