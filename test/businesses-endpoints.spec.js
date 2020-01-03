@@ -147,15 +147,6 @@ describe("Businesses Endpoints", () => {
   });
 
   describe("POST /api/businesses", () => {
-    beforeEach("insert categories and addresses", () => {
-      return db
-        .into("category")
-        .insert(testCategories)
-        .then(() => {
-          return db.into("address").insert(testAddresses);
-        });
-    });
-
     [
       "visual_id",
       "business_name",
