@@ -4,6 +4,7 @@ const express = require("express");
 const xss = require("xss");
 const logger = require("../logger");
 const bodyParser = express.json();
+const { isWebUri } = require("valid-url");
 
 const BusinessesService = require("./businesses-service");
 
@@ -85,6 +86,15 @@ businessesRouter
           error: { message: `'${field}' is required` }
         });
       }
+    }
+
+    if (google_place && !isWebUri(google_place)) {
+      logger.error(`Invalid url '${google_place}' supplied`);
+      return res.status(400).send({
+        error: {
+          message: "'google_place' must be a valid URL"
+        }
+      });
     }
   });
 
