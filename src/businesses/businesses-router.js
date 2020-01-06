@@ -88,7 +88,7 @@ businessesRouter
       }
     }
 
-    if (google_place && !isWebUri(google_place)) {
+    if (!isWebUri(google_place)) {
       logger.error(`Invalid url '${google_place}' supplied`);
       return res.status(400).send({
         error: {
