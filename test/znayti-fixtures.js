@@ -50,7 +50,7 @@ function makeZnaytiArrays() {
       business_name: "New Business 1",
       category_id: 1,
       address_id: 2,
-      google_place: "Some Google Place 123",
+      google_place: "https://maps.google.com/?cid=8022026",
       telephone: "1234567890",
       contact_name: "Bob"
     },
@@ -60,7 +60,7 @@ function makeZnaytiArrays() {
       business_name: "New Business 2",
       category_id: 2,
       address_id: 1,
-      google_place: "Some Google Place 456",
+      google_place: "https://maps.google.com/?cid=8022026861",
       telephone: "1234567890",
       contact_name: "Joe"
     },
@@ -70,7 +70,7 @@ function makeZnaytiArrays() {
       business_name: "New Business 3",
       category_id: 2,
       address_id: 3,
-      google_place: "Some Google Place 789",
+      google_place: "https://maps.google.com/?cid=8022",
       telephone: "1234567890",
       contact_name: "Joe"
     }
