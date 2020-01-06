@@ -191,6 +191,21 @@ describe("Businesses Endpoints", () => {
           error: { message: "'google_place' must be a valid URL" }
         });
     });
+
+    it("Responds with 400 invalid 'telephone' if the telephone format isn't correct", () => {
+      const wrongTelephone = {
+        ...testBusinesses[0],
+        telephone: "123-456-7890"
+      };
+
+      return supertest(app)
+        .post("/api/businesses/")
+        .send(wrongTelephone)
+        .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+        .expect(400, {
+          error: { message: "'telephone' must be in this format: '1234567890'" }
+        });
+    });
   });
 
   describe("GET /api/businesses/:id", () => {
