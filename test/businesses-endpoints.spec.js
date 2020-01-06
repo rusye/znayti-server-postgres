@@ -176,6 +176,21 @@ describe("Businesses Endpoints", () => {
           .expect(400, { error: { message: `'${field}' is required` } });
       });
     });
+
+    it("Responds with 400 invalid 'url' if not a valid url", () => {
+      const wrongGooglePlace = {
+        ...testBusinesses[0],
+        google_place: "htp:/somebadplace.ce"
+      };
+
+      return supertest(app)
+        .post("/api/businesses/")
+        .send(wrongGooglePlace)
+        .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+        .expect(400, {
+          error: { message: "'google_place' must be a valid URL" }
+        });
+    });
   });
 
   describe("GET /api/businesses/:id", () => {
