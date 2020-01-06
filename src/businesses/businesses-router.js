@@ -12,11 +12,11 @@ const businessesRouter = express.Router();
 
 const serializeBusiness = business => ({
   ...business,
-  category_name: xss(business.category_name),
-  street: xss(business.street),
-  city: xss(business.city),
-  business_name: xss(business.business_name),
-  contact_name: xss(business.contact_name)
+  ...business.category_name ? {category_name: xss(business.category_name)} : null,
+  ...business.street ? {street: xss(business.street)} : null,
+  ...business.city ? {city: xss(business.city)} : null,
+  ...business.business_name ? {business_name: xss(business.business_name)} : null,
+  ...business.contact_name ? {contact_name: xss(business.contact_name)} : null
 });
 
 businessesRouter
