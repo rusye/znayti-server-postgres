@@ -206,6 +206,33 @@ describe("Businesses Endpoints", () => {
           error: { message: "'telephone' must be in this format: '1234567890'" }
         });
     });
+
+    it("Add's a new business to the store", () => {
+      const expectedBusinessesResult = {
+        ...testBusinesses[0],
+        average_rating: null,
+        deleted_on: null,
+        review_count: 0
+      };
+
+      return db
+        .into("category")
+        .insert(testCategories)
+        .then(() => {
+          return db.into("address").insert(testAddresses);
+        })
+        .then(() =>
+          supertest(app)
+            .post("/api/businesses/")
+            .send(testBusinesses[0])
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(201)
+            .expect(res => {
+              expectedBusinessesResult.id = res.body.id;
+              expect(res.body).to.eql(expectedBusinessesResult);
+            })
+        );
+    });
   });
 
   describe("GET /api/businesses/:id", () => {
