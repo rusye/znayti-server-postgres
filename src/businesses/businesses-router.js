@@ -1,6 +1,7 @@
 "use strict";
 
 const express = require("express");
+const path = require('path')
 const xss = require("xss");
 const logger = require("../logger");
 const bodyParser = express.json();
@@ -99,10 +100,10 @@ businessesRouter
 
     const isTelephone = tel => {
       const phoneRegex = /^[0-9]{10,10}$/;
-      return !phoneRegex.test(tel) ? false : true
-    }
+      return !phoneRegex.test(tel) ? false : true;
+    };
 
-    if(!isTelephone(telephone)) {
+    if (!isTelephone(telephone)) {
       logger.error(`Invalid telephone format '${telephone}' supplied`);
       return res.status(400).send({
         error: {
@@ -110,6 +111,16 @@ businessesRouter
         }
       });
     }
+
+    BusinessesService.insertBusiness(req.app.get("db"), newBusiness).then(
+      business => {
+        logger.info(`Business with id ${business.id} created.`);
+        res
+          .status(201)
+          .location(path.posix.join(req.originalUrl, `${business.id}`))
+          .json(serializeBusiness(business));
+      }
+    );
   });
 
 businessesRouter

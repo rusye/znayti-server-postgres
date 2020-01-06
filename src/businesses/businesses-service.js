@@ -30,6 +30,15 @@ const BusinessesService = {
       .where({ visual_id })
       .first();
   },
+  insertBusiness(knex, newBusiness) {
+    return knex
+      .insert(newBusiness)
+      .into("business")
+      .returning("*")
+      .then(rows => {
+        return rows[0];
+      });
+  },
   deleteBusiness(knex, visual_id) {
     return knex("business")
       .where({ visual_id })
