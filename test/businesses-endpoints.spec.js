@@ -135,13 +135,19 @@ describe("Businesses Endpoints", () => {
         }
       );
 
+      const expectedResult = {
+        ...maliciousAddress,
+        ...maliciousBusiness,
+        ...expectedBusiness
+      };
+
       it("Removes XSS attack content", () => {
         return supertest(app)
           .get(
             "/api/businesses/?long=-122.674396&lat=45.545708&rad=50&input=Portland, OR"
           )
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(200, [expectedBusiness]);
+          .expect(200, [expectedResult]);
       });
     });
   });

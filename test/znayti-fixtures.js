@@ -168,11 +168,9 @@ function makeMaliciousBusiness() {
   const expectedBusiness = {
     category_name: 'Bad Category &lt;script&gt;alert("xss");&lt;/script&gt;',
     c_id: maliciousBusiness.category_id,
-    ...maliciousAddress,
     street: '123 Main St. &lt;script&gt;alert("xss");&lt;/script&gt;',
     city: 'Portland &lt;script&gt;alert("xss");&lt;/script&gt;',
     a_id: maliciousBusiness.address_id,
-    ...maliciousBusiness,
     business_name: 'New Business 1 &lt;script&gt;alert("xss");&lt;/script&gt;',
     contact_name: 'Bob &lt;script&gt;alert("xss");&lt;/script&gt;',
     review_count: 0,
