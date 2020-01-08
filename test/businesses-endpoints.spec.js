@@ -242,6 +242,31 @@ describe("Businesses Endpoints", () => {
             })
         );
     });
+
+    it("Removes XSS attack content from response", () => {
+      const {
+        maliciousBusiness,
+        expectedMaliciousBusiness
+      } = fixtures.makeMaliciousBusiness();
+
+      return db
+        .into("category")
+        .insert(testCategories)
+        .then(() => {
+          return db.into("address").insert(testAddresses);
+        })
+        .then(() =>
+          supertest(app)
+            .post("/api/businesses/")
+            .send(maliciousBusiness)
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(201)
+            .expect(res => {
+              expectedMaliciousBusiness.id = res.body.id;
+              expect(res.body).to.eql(expectedMaliciousBusiness);
+            })
+        );
+    });
   });
 
   describe("GET /api/businesses/:id", () => {
