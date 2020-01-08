@@ -165,25 +165,33 @@ function makeMaliciousBusiness() {
     telephone: "1234567890",
     contact_name: 'Bob <script>alert("xss");</script>'
   };
-  const expectedBusiness = {
-    category_name: 'Bad Category &lt;script&gt;alert("xss");&lt;/script&gt;',
+  const expectedMaliciousCategory = {
+    ...maliciousCategory,
     c_id: maliciousBusiness.category_id,
+    category_name: 'Bad Category &lt;script&gt;alert("xss");&lt;/script&gt;'
+  };
+  const expectedMaliciousAddress = {
+    ...maliciousAddress,
     street: '123 Main St. &lt;script&gt;alert("xss");&lt;/script&gt;',
     city: 'Portland &lt;script&gt;alert("xss");&lt;/script&gt;',
-    a_id: maliciousBusiness.address_id,
+    a_id: maliciousBusiness.address_id
+  };
+  const expectedMaliciousBusiness = {
+    ...maliciousBusiness,
     business_name: 'New Business 1 &lt;script&gt;alert("xss");&lt;/script&gt;',
     contact_name: 'Bob &lt;script&gt;alert("xss");&lt;/script&gt;',
     review_count: 0,
     average_rating: null,
-    deleted_on: null,
-    hours: [null]
+    deleted_on: null
   };
 
   return {
     maliciousCategory,
     maliciousAddress,
     maliciousBusiness,
-    expectedBusiness
+    expectedMaliciousCategory,
+    expectedMaliciousAddress,
+    expectedMaliciousBusiness
   };
 }
 

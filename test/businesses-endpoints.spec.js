@@ -117,7 +117,9 @@ describe("Businesses Endpoints", () => {
         maliciousCategory,
         maliciousAddress,
         maliciousBusiness,
-        expectedBusiness
+        expectedMaliciousCategory,
+        expectedMaliciousAddress,
+        expectedMaliciousBusiness
       } = fixtures.makeMaliciousBusiness();
 
       beforeEach(
@@ -136,9 +138,10 @@ describe("Businesses Endpoints", () => {
       );
 
       const expectedResult = {
-        ...maliciousAddress,
-        ...maliciousBusiness,
-        ...expectedBusiness
+        ...expectedMaliciousCategory,
+        ...expectedMaliciousAddress,
+        ...expectedMaliciousBusiness,
+        hours: [null]
       };
 
       it("Removes XSS attack content", () => {
