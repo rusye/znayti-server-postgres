@@ -161,7 +161,7 @@ function makeMaliciousBusiness() {
     business_name: 'New Business 1 <script>alert("xss");</script>',
     category_id: 1,
     address_id: 1,
-    google_place: "Some Google Place 123",
+    google_place: "https://maps.google.com/?cid=8022",
     telephone: "1234567890",
     contact_name: 'Bob <script>alert("xss");</script>'
   };
