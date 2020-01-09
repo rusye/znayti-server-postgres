@@ -147,6 +147,38 @@ businessesRouter
     res.json(serializeBusiness(res.business));
   })
 
+  .patch(bodyParser, (req, res, next) => {
+    const {
+      business_name,
+      contact_name,
+      category_id,
+      address_id,
+      google_place,
+      telephone
+    } = req.body;
+
+    const businessToUpdate = {
+      business_name,
+      contact_name,
+      category_id,
+      address_id,
+      google_place,
+      telephone
+    };
+
+    const numberOfValues = Object.values(businessToUpdate).filter(Boolean)
+      .length;
+    if (numberOfValues === 0) {
+      logger.error("Invalid update without required fields");
+      return res.status(400).json({
+        error: {
+          message:
+            "Request body must contain either 'business_name', 'contact_name', 'category_id', 'address_id', 'google_place' or 'telephone'"
+        }
+      });
+    }
+  })
+
   .delete((req, res, next) => {
     const { business_visual_id } = req.params;
     BusinessesService.deleteBusiness(req.app.get("db"), business_visual_id)
