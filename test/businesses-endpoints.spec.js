@@ -308,6 +308,27 @@ describe("Businesses Endpoints", () => {
           .expect(404, { error: { message: "Business Not Found" } });
       });
     });
+
+    context("Given there are businesses in the database", () => {
+      beforeEach("insert categories, addresses, hours, and businesses", () => {
+        return testInsertions();
+      });
+
+      it.only("Responds with 400 when no required fields are supplied", () => {
+        const businessToUpdate = "new-business-2-789012";
+
+        return supertest(app)
+          .patch(`/api/businesses/${businessToUpdate}`)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .send({ irrelevantField: "foo" })
+          .expect(400, {
+            error: {
+              message:
+                "Request body must contain either 'business_name', 'contact_name', 'category_id', 'address_id', 'google_place' or 'telephone'"
+            }
+          });
+      });
+    });
   });
 
   describe("DELETE api/businesses/:id", () => {
