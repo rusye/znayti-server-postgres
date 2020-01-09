@@ -299,6 +299,17 @@ describe("Businesses Endpoints", () => {
     });
   });
 
+  describe("PATCH /api/businesses/:id", () => {
+    context("Given no business", () => {
+      it("Responds with 404 when the business doesn't exist", () => {
+        return supertest(app)
+          .get("/api/businesses/some-business-564658")
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(404, { error: { message: "Business Not Found" } });
+      });
+    });
+  });
+
   describe("DELETE api/businesses/:id", () => {
     context("Given no business", () => {
       it("Responds with 404 when the business doesn't exist", () => {
