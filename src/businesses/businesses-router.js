@@ -1,7 +1,7 @@
 "use strict";
 
 const express = require("express");
-const path = require('path')
+const path = require("path");
 const xss = require("xss");
 const logger = require("../logger");
 const bodyParser = express.json();
@@ -13,11 +13,17 @@ const businessesRouter = express.Router();
 
 const serializeBusiness = business => ({
   ...business,
-  ...business.category_name ? {category_name: xss(business.category_name)} : null,
-  ...business.street ? {street: xss(business.street)} : null,
-  ...business.city ? {city: xss(business.city)} : null,
-  ...business.business_name ? {business_name: xss(business.business_name)} : null,
-  ...business.contact_name ? {contact_name: xss(business.contact_name)} : null
+  ...(business.category_name
+    ? { category_name: xss(business.category_name) }
+    : null),
+  ...(business.street ? { street: xss(business.street) } : null),
+  ...(business.city ? { city: xss(business.city) } : null),
+  ...(business.business_name
+    ? { business_name: xss(business.business_name) }
+    : null),
+  ...(business.contact_name
+    ? { contact_name: xss(business.contact_name) }
+    : null)
 });
 
 businessesRouter
@@ -112,8 +118,8 @@ businessesRouter
       });
     }
 
-    BusinessesService.insertBusiness(req.app.get("db"), newBusiness).then(
-      business => {
+    BusinessesService.insertBusiness(req.app.get("db"), newBusiness)
+      .then(business => {
         logger.info(`Business with id ${business.id} created.`);
         res
           .status(201)
