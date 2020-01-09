@@ -64,8 +64,7 @@ businessesRouter
       category_id,
       address_id,
       google_place,
-      telephone,
-      deleted_on
+      telephone
     } = req.body;
 
     const newBusiness = {
@@ -75,8 +74,7 @@ businessesRouter
       category_id,
       address_id,
       google_place,
-      telephone,
-      deleted_on
+      telephone
     };
 
     for (const field of [
@@ -125,8 +123,8 @@ businessesRouter
           .status(201)
           .location(path.posix.join(req.originalUrl, `${business.id}`))
           .json(serializeBusiness(business));
-      }
-    );
+      })
+      .catch(next);
   });
 
 businessesRouter
