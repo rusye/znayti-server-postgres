@@ -314,7 +314,7 @@ describe("Businesses Endpoints", () => {
         return testInsertions();
       });
 
-      it.only("Responds with 400 when no required fields are supplied", () => {
+      it("Responds with 400 when no required fields are supplied", () => {
         const businessToUpdate = "new-business-2-789012";
 
         return supertest(app)
@@ -325,6 +325,40 @@ describe("Businesses Endpoints", () => {
             error: {
               message:
                 "Request body must contain either 'business_name', 'contact_name', 'category_id', 'address_id', 'google_place' or 'telephone'"
+            }
+          });
+      });
+
+      it("Responds with 400 invalid 'url' if not a valid url", () => {
+        const businessToUpdate = "new-business-2-789012";
+
+        const wrongGooglePlace = {
+          google_place: "htp:/somebadplace.ce"
+        };
+
+        return supertest(app)
+          .patch(`/api/businesses/${businessToUpdate}`)
+          .send(wrongGooglePlace)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: { message: "'google_place' must be a valid URL" }
+          });
+      });
+
+      it("Responds with 400 invalid 'telephone' if the telephone format isn't correct", () => {
+        const businessToUpdate = "new-business-2-789012";
+
+        const wrongTelephone = {
+          telephone: "123-456-7890"
+        };
+
+        return supertest(app)
+          .patch(`/api/businesses/${businessToUpdate}`)
+          .send(wrongTelephone)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message: "'telephone' must be in this format: '1234567890'"
             }
           });
       });
