@@ -362,6 +362,46 @@ describe("Businesses Endpoints", () => {
             }
           });
       });
+
+      it("Responds with 204 and updates the business", () => {
+        const businessToUpdate = "new-business-2-789012";
+
+        const updatedBusiness = {
+          business_name: "Updated Business 1",
+          category_id: 2,
+          address_id: 3,
+          google_place: "https://maps.google.com/?cid=89996",
+          telephone: "0987654321",
+          contact_name: "John Doe"
+        };
+
+        const businessBeforeUpdate = testBusinesses
+          .filter(business => business.visual_id === businessToUpdate)
+          .map(testBusinessesSerilize);
+
+        const expectedBusiness = {
+          ...businessBeforeUpdate[0],
+          ...updatedBusiness,
+          ...testAddresses.filter(
+            address => address.id === updatedBusiness.address_id
+          )[0],
+          a_id: updatedBusiness.address_id,
+          c_id: updatedBusiness.category_id,
+          id: businessBeforeUpdate[0].id
+        };
+
+        return supertest(app)
+          .patch(`/api/businesses/${businessToUpdate}`)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .send(updatedBusiness)
+          .expect(204)
+          .then(res =>
+            supertest(app)
+              .get(`/api/businesses/${businessToUpdate}`)
+              .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+              .expect(expectedBusiness)
+          );
+      });
     });
   });
 
