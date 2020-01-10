@@ -39,6 +39,11 @@ const BusinessesService = {
         return rows[0];
       });
   },
+  updateBusiness(knex, visual_id, newBusinessFields) {
+    return knex("business")
+      .where({ visual_id })
+      .update(newBusinessFields);
+  },
   deleteBusiness(knex, visual_id) {
     return knex("business")
       .where({ visual_id })

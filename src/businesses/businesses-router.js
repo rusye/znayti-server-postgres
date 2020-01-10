@@ -204,6 +204,16 @@ businessesRouter
         }
       });
     }
+
+    BusinessesService.updateBusiness(
+      req.app.get("db"),
+      req.params.business_visual_id,
+      businessToUpdate
+    )
+      .then(numRowsAffected => {
+        res.status(204).end();
+      })
+      .catch(next);
   })
 
   .delete((req, res, next) => {
