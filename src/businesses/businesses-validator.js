@@ -1,0 +1,35 @@
+const { isWebUri } = require("valid-url");
+const logger = require("../logger");
+
+const NO_ERRORS = null;
+
+function getBusinessValidationError({ google_place, telephone }) {
+  const isTelephone = tel => {
+    const phoneRegex = /^[0-9]{10,10}$/;
+    return !phoneRegex.test(tel) ? false : true;
+  };
+
+  if (google_place && !isWebUri(google_place)) {
+    logger.error(`Invalid url '${google_place}' supplied`);
+    return {
+      error: {
+        message: "'google_place' must be a valid URL"
+      }
+    };
+  }
+
+  if (telephone && !isTelephone(telephone)) {
+    logger.error(`Invalid telephone format '${telephone}' supplied`);
+    return {
+      error: {
+        message: "'telephone' must be in this format: '1234567890'"
+      }
+    };
+  }
+
+  return NO_ERRORS;
+}
+
+module.exports = {
+  getBusinessValidationError
+};
