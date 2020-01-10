@@ -402,6 +402,39 @@ describe("Businesses Endpoints", () => {
               .expect(expectedBusiness)
           );
       });
+
+      it("Responds with 204 when updating only a subset of fields", () => {
+        const businessToUpdate = "new-business-2-789012";
+
+        const updatedBusiness = {
+          google_place: "https://maps.google.com/?cid=89996"
+        };
+        
+        const businessBeforeUpdate = testBusinesses
+          .filter(business => business.visual_id === businessToUpdate)
+          .map(testBusinessesSerilize);
+
+        const expectedBusiness = {
+          ...businessBeforeUpdate[0],
+          ...updatedBusiness
+        };
+
+        return supertest(app)
+          .patch(`/api/businesses/${businessToUpdate}`)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .send({
+            ...updatedBusiness,
+            visual_id: "Shound not be in GET",
+            fieldToIgnore: "Shound not be in GET"
+          })
+          .expect(204)
+          .then(res =>
+            supertest(app)
+              .get(`/api/businesses/${businessToUpdate}`)
+              .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+              .expect(expectedBusiness)
+          );
+      });
     });
   });
 
