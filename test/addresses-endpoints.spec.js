@@ -23,7 +23,18 @@ describe("Addresses Endpoints", () => {
   after("disconnect from db", () => db.destroy());
 
   describe("GET /api/addresses", () => {
-    context("Given no addresses", () => {
+    context("Given no addresses in a certain zipcode", () => {
+      it("It responds with 400 missing zipcode if not supplied", () => {
+        return supertest(app)
+          .get("/api/addresses/")
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message: "Missing zipcode in request params"
+            }
+          });
+      });
+
       it("Responds with 200 and an empty list", () => {
         return supertest(app)
           .get("/api/addresses/")
