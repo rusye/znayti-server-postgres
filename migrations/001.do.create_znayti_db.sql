@@ -70,12 +70,13 @@ CREATE TABLE address (
   suite VARCHAR(10),
   city VARCHAR(50) NOT NULL,
   state states NOT NULL,
-  zipcode VARCHAR(10) NOT NULL,
+  zipcode CHAR(5) NOT NULL,
   longitude DOUBLE PRECISION NOT NULL,
   latitude DOUBLE PRECISION NOT NULL
 );
 
 CREATE INDEX address_lat_long ON address USING gist (ll_to_earth(latitude, longitude));
+CREATE INDEX zipcode_index ON address (zipcode);
 
 -- Create the business
 CREATE TABLE business (
