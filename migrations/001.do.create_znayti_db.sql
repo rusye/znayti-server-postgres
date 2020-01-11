@@ -109,4 +109,4 @@ CREATE TABLE hours (
   closes TIME NOT NULL
 );
 
-CREATE INDEX hours_id_index ON hours (id, day_of_week ASC);
+CREATE INDEX hours_id_index ON hours (id, day_of_week);
