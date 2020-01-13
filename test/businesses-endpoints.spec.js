@@ -32,6 +32,25 @@ describe("Businesses Endpoints", () => {
     expectedCategoryCount
   } = fixtures.makeZnaytiArrays();
 
+  const distinctArrayCount = array => {
+    let distinctCount = {};
+
+    for (let i = 0; i < array.length; i++) {
+      distinctCount[array[i].category_name] =
+        (distinctCount[array[i].category_name] || 0) + 1;
+    }
+
+    const distinctCountArray = [];
+
+    Object.keys(distinctCount).map(key => {
+      const newObj = {};
+      newObj[key] = distinctCount[key];
+      return distinctCountArray.push(newObj);
+    });
+
+    return distinctCountArray;
+  };
+
   const testInsertions = () => {
     return db
       .into("category")
@@ -55,7 +74,7 @@ describe("Businesses Endpoints", () => {
             "/api/businesses/?long=-122.674396&lat=45.545708&rad=10&input=Portland, OR"
           )
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(200, []);
+          .expect(200, [[], []]);
       });
 
       const requiredParams = ["long", "lat", "rad"];
@@ -141,12 +160,14 @@ describe("Businesses Endpoints", () => {
         }
       );
 
-      const expectedResult = {
+      const expectedBusiness = [
+        {
         ...expectedMaliciousCategory,
         ...expectedMaliciousAddress,
         ...expectedMaliciousBusiness,
         hours: [null]
-      };
+        }
+      ];
 
       it("Removes XSS attack content", () => {
         return supertest(app)
@@ -154,7 +175,10 @@ describe("Businesses Endpoints", () => {
             "/api/businesses/?long=-122.674396&lat=45.545708&rad=50&input=Portland, OR"
           )
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(200, [expectedResult]);
+          .expect(200, [
+            expectedBusiness,
+            distinctArrayCount(expectedBusiness)
+          ]);
       });
     });
   });
@@ -483,7 +507,10 @@ describe("Businesses Endpoints", () => {
                 "/api/businesses/?long=-122.674396&lat=45.545708&rad=10&input=Portland, OR"
               )
               .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-              .expect(200, expectedBusinessesResult)
+              .expect(200, [
+                expectedBusinessesResult,
+                distinctArrayCount(expectedBusinessesResult)
+              ])
           );
       });
     });
