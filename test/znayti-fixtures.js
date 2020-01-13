@@ -119,6 +119,8 @@ function makeZnaytiArrays() {
     return testArray.filter(obj => obj.id === id);
   };
 
+  const expectedCategoryCount = ["Auto", "Bakery"];
+
   const testBusinessesSerilize = business => ({
     ...findObject(testAddresses, business.address_id)[0],
     ...findObject(testCategories, business.category_id)[0],
@@ -136,7 +138,8 @@ function makeZnaytiArrays() {
     testAddresses,
     testBusinesses,
     testHours,
-    testBusinessesSerilize
+    testBusinessesSerilize,
+    expectedCategoryCount
   };
 }
 

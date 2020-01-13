@@ -51,7 +51,15 @@ businessesRouter
       req.query.rad
     )
       .then(businesses => {
-        res.json(businesses.map(serializeBusiness));
+        let categoryNames = [];
+
+        for (let i = 0; i < businesses.length; i++) {
+          if (categoryNames.indexOf(businesses[i].category_name) === -1) {
+            categoryNames.push(businesses[i].category_name);
+          }
+        }
+
+        res.json([businesses.map(serializeBusiness), categoryNames]);
       })
       .catch(next);
   })
