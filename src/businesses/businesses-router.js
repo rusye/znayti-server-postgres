@@ -58,7 +58,15 @@ businessesRouter
             (distinctCount[businesses[i].category_name] || 0) + 1;
           }
 
-        res.json([businesses.map(serializeBusiness), distinctCount]);
+        const distinctCountArray = [];
+
+        Object.keys(distinctCount).map(key => {
+          const newObj = {};
+          newObj[xss(key)] = distinctCount[key];
+          return distinctCountArray.push(newObj);
+        });
+
+        res.json([businesses.map(serializeBusiness), distinctCountArray]);
       })
       .catch(next);
   })

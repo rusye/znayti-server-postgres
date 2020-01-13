@@ -119,7 +119,7 @@ function makeZnaytiArrays() {
     return testArray.filter(obj => obj.id === id);
   };
 
-  const expectedCategoryCount = { Auto: 1, Bakery: 1 };
+  const expectedCategoryCount = [{ Auto: 1 }, { Bakery: 1 }];
 
   const testBusinessesSerilize = business => ({
     ...findObject(testAddresses, business.address_id)[0],
