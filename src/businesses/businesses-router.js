@@ -51,15 +51,14 @@ businessesRouter
       req.query.rad
     )
       .then(businesses => {
-        let categoryNames = [];
+        let distinctCount = {};
 
         for (let i = 0; i < businesses.length; i++) {
-          if (categoryNames.indexOf(businesses[i].category_name) === -1) {
-            categoryNames.push(businesses[i].category_name);
+          distinctCount[businesses[i].category_name] =
+            (distinctCount[businesses[i].category_name] || 0) + 1;
           }
-        }
 
-        res.json([businesses.map(serializeBusiness), categoryNames]);
+        res.json([businesses.map(serializeBusiness), distinctCount]);
       })
       .catch(next);
   })
