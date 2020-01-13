@@ -28,7 +28,8 @@ describe("Businesses Endpoints", () => {
     testAddresses,
     testBusinesses,
     testHours,
-    testBusinessesSerilize
+    testBusinessesSerilize,
+    expectedCategoryCount
   } = fixtures.makeZnaytiArrays();
 
   const testInsertions = () => {
@@ -98,9 +99,12 @@ describe("Businesses Endpoints", () => {
         return testInsertions();
           });
 
-      const expectedBusinessesResult = testBusinesses
+      const expectedBusinessesResult = [
+        testBusinesses
         .filter(business => business.id !== 3)
-        .map(testBusinessesSerilize);
+          .map(testBusinessesSerilize),
+        expectedCategoryCount
+      ];
 
       it("It responds with a 200 and businesses within a 10 miles radius", () => {
         return supertest(app)
