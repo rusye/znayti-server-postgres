@@ -23,11 +23,15 @@ describe("Addresses Endpoints", () => {
   after("disconnect from db", () => db.destroy());
 
     context("Zipcode validation", () => {
-      it("Responds with 200 and an empty list", () => {
+      it("It responds with 400 missing zipcode if not supplied", () => {
         return supertest(app)
-          .get("/api/addresses/?zipcode=97236")
+          .get("/api/addresses/")
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(200, []);
+          .expect(400, {
+            error: {
+              message: "Missing zipcode in request params"
+            }
+          });
       });
 
       it("Responds with 400 zipcode is too short", () => {
@@ -67,15 +71,11 @@ describe("Addresses Endpoints", () => {
     });
 
     context("Given no addresses in a certain zipcode", () => {
-      it("It responds with 400 missing zipcode if not supplied", () => {
+      it("Responds with 200 and an empty list", () => {
         return supertest(app)
-          .get("/api/addresses/")
+          .get("/api/addresses/?zipcode=97236")
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(400, {
-            error: {
-              message: "Missing zipcode in request params"
-            }
-          });
+          .expect(200, []);
       });
     });
   });
