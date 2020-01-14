@@ -41,6 +41,30 @@ describe("Addresses Endpoints", () => {
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(200, []);
       });
+
+      it("Responds with 400 zipcode is too short", () => {
+        return supertest(app)
+          .get("/api/addresses/?zipcode=1")
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message:
+                'request param "zipcode" is too short, must have a length of 5 digits'
+            }
+          });
+      });
+
+      it("Responds with 400 zipcode is too long", () => {
+        return supertest(app)
+          .get("/api/addresses/?zipcode=166666")
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message:
+                'request param "zipcode" is too long, must have a length of 5 digits'
+            }
+          });
+      });
     });
   });
 });
