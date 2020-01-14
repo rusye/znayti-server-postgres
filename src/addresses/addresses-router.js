@@ -13,21 +13,13 @@ addressesRouter.route("/").get((req, res, next) => {
       .json({ error: { message: "Missing zipcode in request params" } });
   }
 
-  if (req.query.zipcode.length < 5) {
+  if (req.query.zipcode.length < 5 || req.query.zipcode.length > 5) {
     return res.status(400).json({
         error: {
-          message:
-            'request param "zipcode" is too short, must have a length of 5 digits'
-        }
-      });
+        message: `request param "zipcode" is too ${
+          req.query.zipcode.length < 5 ? "short" : "long"
+        }, must have a length of 5 digits`
   }
-
-  if (req.query.zipcode.length > 5) {
-    return res.status(400).json({
-        error: {
-          message:
-            'request param "zipcode" is too long, must have a length of 5 digits'
-        }
       });
   }
 
