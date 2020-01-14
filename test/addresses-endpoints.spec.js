@@ -49,7 +49,7 @@ describe("Addresses Endpoints", () => {
           .expect(400, {
             error: {
               message:
-                'request param "zipcode" is too short, must have a length of 5 digits'
+                "request param zipcode is too short, must have a length of 5 digits"
             }
           });
       });
@@ -61,7 +61,18 @@ describe("Addresses Endpoints", () => {
           .expect(400, {
             error: {
               message:
-                'request param "zipcode" is too long, must have a length of 5 digits'
+                "request param zipcode is too long, must have a length of 5 digits"
+            }
+          });
+      });
+
+      it("Responds with 400 zipcode must be numeric", () => {
+        return supertest(app)
+          .get("/api/addresses/?zipcode=asdfg")
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message: "request param zipcode must be numeric"
             }
           });
       });
