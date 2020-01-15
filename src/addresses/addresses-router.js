@@ -33,7 +33,7 @@ addressesRouter.route("/").get((req, res, next) => {
     });
   }
 
-  AddressesService.getAllAddresses(req.app.get("db"))
+  AddressesService.getAllAddresses(req.app.get("db"), zipcode)
     .then(addresses => {
       res.json(addresses);
     })
