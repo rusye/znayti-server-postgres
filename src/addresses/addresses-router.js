@@ -7,23 +7,25 @@ const AddressesService = require("./addresses-service");
 const addressesRouter = express.Router();
 
 addressesRouter.route("/").get((req, res, next) => {
-  if (!req.query.zipcode) {
+  const { zipcode } = req.query;
+
+  if (!zipcode) {
     return res
       .status(400)
       .json({ error: { message: "Missing zipcode in request params" } });
   }
 
-  if (req.query.zipcode.length < 5 || req.query.zipcode.length > 5) {
+  if (zipcode.length < 5 || zipcode.length > 5) {
     return res.status(400).json({
         error: {
         message: `request param zipcode is too ${
-          req.query.zipcode.length < 5 ? "short" : "long"
+          zipcode.length < 5 ? "short" : "long"
         }, must have a length of 5 digits`
   }
       });
   }
 
-  if (isNaN(req.query.zipcode)) {
+  if (isNaN(zipcode)) {
     return res.status(400).json({
       error: {
         message: "request param zipcode must be numeric"
