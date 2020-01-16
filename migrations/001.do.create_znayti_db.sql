@@ -76,7 +76,7 @@ CREATE TABLE address (
 );
 
 CREATE INDEX address_lat_long ON address USING gist (ll_to_earth(latitude, longitude));
-CREATE INDEX zipcode_index ON address (zipcode, city, street);
+CREATE INDEX zipcode_index ON address (state, zipcode, city, street, suite);
 
 -- Create the business
 CREATE TABLE business (
