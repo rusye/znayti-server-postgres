@@ -25,6 +25,7 @@ describe("Addresses Endpoints", () => {
 
   const { testAddresses } = fixtures.makeZnaytiArrays();
 
+  describe("GET /api/addresses", () => {
     context("Zipcode validation", () => {
       it("It responds with 400 missing zipcode if not supplied", () => {
         return supertest(app)
@@ -73,7 +74,7 @@ describe("Addresses Endpoints", () => {
       });
     });
 
-    context("Given no addresses in a certain zipcode", () => {
+    context("Given no addresses in the database", () => {
       it("Responds with 200 and an empty list", () => {
         return supertest(app)
           .get("/api/addresses/?zipcode=97236")
@@ -87,17 +88,38 @@ describe("Addresses Endpoints", () => {
         return db.into("address").insert(testAddresses);
       });
 
-      const zipcodeToSearch = "97236";
-
-      const expectedAddressesResult = testAddresses.filter(
-        address => address.zipcode === zipcodeToSearch
-      );
-
       it("It responds with a 200 and addresses with a certain zipcode", () => {
+        const zipcodeToSearch = "97236";
+
+        const expectedAddressesResult = testAddresses.filter(
+          address => address.zipcode === zipcodeToSearch
+        );
         return supertest(app)
           .get(`/api/addresses/?zipcode=${zipcodeToSearch}`)
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(200, expectedAddressesResult);
+      });
+    });
+
+    context("Given an XSS attack on address", () => {
+      const {
+        maliciousAddress,
+        expectedMaliciousAddress
+      } = fixtures.makeMaliciousBusiness();
+
+      beforeEach("Insert a malicious address", () => {
+        return db.into("address").insert([maliciousAddress]);
+      });
+
+      const zipcodeToSearch = "97236";
+
+      const expectedAddressResult = [{ ...expectedMaliciousAddress }];
+
+      it("Removes XSS attack content", () => {
+        return supertest(app)
+          .get(`/api/addresses/?zipcode=${zipcodeToSearch}`)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(200, expectedAddressResult);
       });
     });
   });
