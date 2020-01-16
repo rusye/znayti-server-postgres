@@ -165,6 +165,8 @@ describe("Businesses Endpoints", () => {
         ...expectedMaliciousCategory,
         ...expectedMaliciousAddress,
         ...expectedMaliciousBusiness,
+          c_id: maliciousBusiness.category_id,
+          a_id: maliciousBusiness.address_id,
         hours: [null]
         }
       ];

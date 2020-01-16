@@ -170,14 +170,12 @@ function makeMaliciousBusiness() {
   };
   const expectedMaliciousCategory = {
     ...maliciousCategory,
-    c_id: maliciousBusiness.category_id,
     category_name: 'Bad Category &lt;script&gt;alert("xss");&lt;/script&gt;'
   };
   const expectedMaliciousAddress = {
     ...maliciousAddress,
     street: '123 Main St. &lt;script&gt;alert("xss");&lt;/script&gt;',
-    city: 'Portland &lt;script&gt;alert("xss");&lt;/script&gt;',
-    a_id: maliciousBusiness.address_id
+    city: 'Portland &lt;script&gt;alert("xss");&lt;/script&gt;'
   };
   const expectedMaliciousBusiness = {
     ...maliciousBusiness,
