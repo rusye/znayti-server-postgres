@@ -1,10 +1,17 @@
 "use strict";
 
 const express = require("express");
+const xss = require("xss");
 
 const AddressesService = require("./addresses-service");
 
 const addressesRouter = express.Router();
+
+const serializeAddress = address => ({
+  ...address,
+  ...(address.street ? { street: xss(address.street) } : null),
+  ...(address.city ? { city: xss(address.city) } : null)
+});
 
 addressesRouter.route("/").get((req, res, next) => {
   const { zipcode } = req.query;
@@ -35,7 +42,7 @@ addressesRouter.route("/").get((req, res, next) => {
 
   AddressesService.getAllAddresses(req.app.get("db"), zipcode)
     .then(addresses => {
-      res.json(addresses);
+      res.json(addresses.map(serializeAddress));
     })
     .catch(next);
 });
