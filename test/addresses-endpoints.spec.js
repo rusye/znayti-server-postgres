@@ -26,54 +26,6 @@ describe("Addresses Endpoints", () => {
   const { testAddresses } = fixtures.makeZnaytiArrays();
 
   describe("GET /api/addresses", () => {
-    context("Zipcode validation", () => {
-      it("It responds with 400 missing zipcode if not supplied", () => {
-        return supertest(app)
-          .get("/api/addresses/")
-          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(400, {
-            error: {
-              message: "Missing zipcode in request params"
-            }
-          });
-      });
-
-      it("Responds with 400 zipcode is too short", () => {
-        return supertest(app)
-          .get("/api/addresses/?zipcode=1")
-          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(400, {
-            error: {
-              message:
-                "request param zipcode is too short, must have a length of 5 digits"
-            }
-          });
-      });
-
-      it("Responds with 400 zipcode is too long", () => {
-        return supertest(app)
-          .get("/api/addresses/?zipcode=166666")
-          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(400, {
-            error: {
-              message:
-                "request param zipcode is too long, must have a length of 5 digits"
-            }
-          });
-      });
-
-      it("Responds with 400 zipcode must be numeric", () => {
-        return supertest(app)
-          .get("/api/addresses/?zipcode=asdfg")
-          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(400, {
-            error: {
-              message: "request param zipcode must be numeric"
-            }
-          });
-      });
-    });
-
     context("Given no addresses in the database", () => {
       it("Responds with 200 and an empty list", () => {
         return supertest(app)
