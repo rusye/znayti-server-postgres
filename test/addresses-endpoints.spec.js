@@ -27,6 +27,32 @@ describe("Addresses Endpoints", () => {
 
   describe("GET /api/addresses", () => {
     context("Given no addresses in the database", () => {
+      const requiredParams = ["zipcode", "city", "street"];
+
+      requiredParams.forEach(param => {
+        const newParams = {
+          zipcode: "97236",
+          city: "Portland",
+          street: "123 main st."
+        };
+        delete newParams[param];
+
+        const queryString = Object.entries(newParams)
+          .map(([key, value]) => {
+            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+          })
+          .join("&");
+
+        it(`Responds with 400 missing ${param} if not supplied`, () => {
+          return supertest(app)
+            .get(`/api/addresses/?${queryString}`)
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(400, {
+              error: { message: `Missing "${param}" in request params` }
+            });
+        });
+      });
+
       it("Responds with 200 and an empty list", () => {
         return supertest(app)
           .get("/api/addresses/?zipcode=97236")
