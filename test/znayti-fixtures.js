@@ -43,8 +43,8 @@ function makeZnaytiArrays() {
     },
     {
       id: 4,
-      street: "123 South St.",
-      city: "Gresham",
+      street: "123 Main St.",
+      city: "Portland",
       state: "OR",
       zipcode: "97236",
       longitude: -122.67824,
