@@ -83,7 +83,8 @@ describe("Addresses Endpoints", () => {
           address =>
             address.zipcode === params.zipcode &&
             address.street === params.street &&
-            address.city === params.city
+            address.city === params.city  &&
+            address.suite === undefined
         );
 
         expectedAddressesResult[0].suite = null;
