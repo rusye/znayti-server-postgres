@@ -55,7 +55,7 @@ describe("Addresses Endpoints", () => {
 
       it("Responds with 200 and an empty list", () => {
         return supertest(app)
-          .get("/api/addresses/?zipcode=97236")
+          .get("/api/addresses/?zipcode=97236&city=Portland&street=123 main st")
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
           .expect(200, []);
       });
