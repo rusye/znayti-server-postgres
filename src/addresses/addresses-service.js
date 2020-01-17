@@ -1,9 +1,9 @@
 const AddressesService = {
-  getAllAddresses(knex, zipcode) {
+  getAllAddresses(knex, zipcode, city, street, suite) {
     return knex
       .select("*")
       .from("address")
-      .where({ zipcode });
+      .where({ zipcode, city, street, suite });
   }
 };
 

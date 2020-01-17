@@ -22,7 +22,9 @@ addressesRouter.route("/").get((req, res, next) => {
   }
   }
 
-  AddressesService.getAllAddresses(req.app.get("db"), zipcode)
+  const { zipcode, city, street, suite = null } = req.query;
+
+  AddressesService.getAllAddresses(req.app.get("db"), zipcode,city, street, suite)
     .then(addresses => {
       res.json(addresses.map(serializeAddress));
     })
