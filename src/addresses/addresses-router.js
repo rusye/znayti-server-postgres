@@ -14,30 +14,12 @@ const serializeAddress = address => ({
 });
 
 addressesRouter.route("/").get((req, res, next) => {
-  const { zipcode } = req.query;
-
-  if (!zipcode) {
+  for (const param of ["zipcode", "city", "street"]) {
+    if (!req.query[param]) {
     return res
       .status(400)
-      .json({ error: { message: "Missing zipcode in request params" } });
+        .json({ error: { message: `Missing "${param}" in request params` } });
   }
-
-  if (zipcode.length < 5 || zipcode.length > 5) {
-    return res.status(400).json({
-        error: {
-        message: `request param zipcode is too ${
-          zipcode.length < 5 ? "short" : "long"
-        }, must have a length of 5 digits`
-  }
-      });
-  }
-
-  if (isNaN(zipcode)) {
-    return res.status(400).json({
-      error: {
-        message: "request param zipcode must be numeric"
-      }
-    });
   }
 
   AddressesService.getAllAddresses(req.app.get("db"), zipcode)
