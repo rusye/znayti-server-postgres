@@ -94,11 +94,12 @@ describe("Addresses Endpoints", () => {
         expectedMaliciousAddress
       } = fixtures.makeMaliciousBusiness();
 
-      beforeEach("Insert a malicious address", () => {
+      context("Removes XSS content from results", () => {
+        before("Insert a malicious address", () => {
         return db.into("address").insert([maliciousAddress]);
       });
 
-      it("Removes XSS attack content", () => {
+        it("It returns 200 and empty array when trying to find XSS attack address in db", () => {
         const { street, city, zipcode, suite } = maliciousAddress;
 
         const queryString = Object.entries({ street, city, zipcode, suite })
@@ -106,6 +107,27 @@ describe("Addresses Endpoints", () => {
             return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
           })
           .join("&");
+
+          return supertest(app)
+            .get(`/api/addresses/?${queryString}`)
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(200, []);
+        });
+      });
+
+      context("It removes XSS content from query", () => {
+        before("Insert a malicious address", () => {
+          return db.into("address").insert([expectedMaliciousAddress]);
+        });
+
+        it("Removes SQL scripting attack from query inputs", () => {
+          const { street, city, zipcode, suite } = maliciousAddress;
+
+          const queryString = Object.entries({ street, city, zipcode, suite })
+            .map(([key, value]) => {
+              return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+            })
+            .join("&");
 
         return supertest(app)
           .get(`/api/addresses/?${queryString}`)
