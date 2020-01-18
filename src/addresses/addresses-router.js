@@ -24,7 +24,13 @@ addressesRouter.route("/").get((req, res, next) => {
 
   const { zipcode, city, street, suite = null } = req.query;
 
-  AddressesService.getAllAddresses(req.app.get("db"), zipcode,city, street, suite)
+  AddressesService.getAllAddresses(
+    req.app.get("db"),
+    zipcode,
+    xss(city),
+    xss(street),
+    suite
+  )
     .then(addresses => {
       res.json(addresses.map(serializeAddress));
     })
