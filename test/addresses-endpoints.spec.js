@@ -67,32 +67,24 @@ describe("Addresses Endpoints", () => {
       });
 
       it("It responds with a 200 and an address that matches the city, street, and zipcode", () => {
-        const params = {
-          street: "123 Main St.",
-          city: "Portland",
-          zipcode: "97236"
-        };
+        const addressToFind = testAddresses.find(
+          address => address.suite === undefined
+        );
 
-        const queryString = Object.entries(params)
+        const { street, city, zipcode } = addressToFind;
+
+        const queryString = Object.entries({ street, city, zipcode })
           .map(([key, value]) => {
             return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
           })
           .join("&");
 
-        const expectedAddressesResult = testAddresses.filter(
-          address =>
-            address.zipcode === params.zipcode &&
-            address.street === params.street &&
-            address.city === params.city  &&
-            address.suite === undefined
-        );
-
-        expectedAddressesResult[0].suite = null;
+        addressToFind.suite = null;
 
         return supertest(app)
           .get(`/api/addresses/?${queryString}`)
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(200, expectedAddressesResult);
+          .expect(200, [addressToFind]);
       });
     });
 
