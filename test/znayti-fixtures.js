@@ -159,9 +159,9 @@ function makeMaliciousBusiness() {
   };
   const maliciousAddress = {
     id: 1,
-    street: '123 Main St. <script>alert("xss");</script>',
+    street: '1 Main <script>alert("xss");</script>',
     suite: "101",
-    city: 'Portland <script>alert("xss");</script>',
+    city: 'Portland<script>alert("xss");</script>',
     state: "OR",
     zipcode: "97236",
     longitude: -122.6786824,
@@ -183,8 +183,8 @@ function makeMaliciousBusiness() {
   };
   const expectedMaliciousAddress = {
     ...maliciousAddress,
-    street: '123 Main St. &lt;script&gt;alert("xss");&lt;/script&gt;',
-    city: 'Portland &lt;script&gt;alert("xss");&lt;/script&gt;'
+    street: '1 Main &lt;script&gt;alert("xss");&lt;/script&gt;',
+    city: 'Portland&lt;script&gt;alert("xss");&lt;/script&gt;'
   };
   const expectedMaliciousBusiness = {
     ...maliciousBusiness,
