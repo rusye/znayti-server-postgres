@@ -98,15 +98,19 @@ describe("Addresses Endpoints", () => {
         return db.into("address").insert([maliciousAddress]);
       });
 
-      const zipcodeToSearch = "97236";
-
-      const expectedAddressResult = [{ ...expectedMaliciousAddress }];
-
       it("Removes XSS attack content", () => {
+        const { street, city, zipcode, suite } = maliciousAddress;
+
+        const queryString = Object.entries({ street, city, zipcode, suite })
+          .map(([key, value]) => {
+            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+          })
+          .join("&");
+
         return supertest(app)
-          .get(`/api/addresses/?zipcode=${zipcodeToSearch}`)
+          .get(`/api/addresses/?${queryString}`)
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(200, expectedAddressResult);
+          .expect(200, [expectedMaliciousAddress]);
       });
     });
   });
