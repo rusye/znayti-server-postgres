@@ -137,3 +137,30 @@ describe("Addresses Endpoints", () => {
     });
   });
 });
+
+  describe("POST /api/addresses", () => {
+    ["street", "city", "state", "zipcode", "longitude", "latitude"].forEach(
+      field => {
+      const newAddress = {
+        street: "123 Main St.",
+        city: "Portland",
+        state: "OR",
+        zipcode: "97236",
+        longitude: -122.6786824,
+        latitude: 45.5187539
+      };
+
+      it(`Responds with 400 missing '${field}' if not supplied`, () => {
+        delete newAddress[field];
+
+        return supertest(app)
+          .post("/api/addresses/")
+          .send(newAddress)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, { error: { message: `'${field}' is required` } });
+      });
+      }
+    );
+    });
+  });
+
