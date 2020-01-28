@@ -251,7 +251,10 @@ describe("Businesses Endpoints", () => {
         ...testBusinesses[0],
         average_rating: null,
         deleted_on: null,
-        review_count: 0
+        review_count: 0,
+        ...(testBusinesses[0].contact_name
+          ? { contact_name: testBusinesses[0].contact_name }
+          : { contact_name: null })
       };
 
       return db
