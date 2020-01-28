@@ -78,6 +78,24 @@ addressesRouter
         });
       }
     }
+
+    if (zipcode.length < 5 || zipcode.length > 5) {
+      return res.status(400).json({
+        error: {
+          message: `zipcode is too ${
+            zipcode.length < 5 ? "short" : "long"
+          }, must have a length of 5 digits`
+        }
 });
+    }
+
+    if (isNaN(zipcode)) {
+      return res.status(400).json({
+        error: {
+          message: "request param zipcode must be numeric"
+        }
+      });
+    }
+  });
 
 module.exports = addressesRouter;
