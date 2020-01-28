@@ -60,8 +60,7 @@ function makeZnaytiArrays() {
       category_id: 1,
       address_id: 2,
       google_place: "https://maps.google.com/?cid=8022026",
-      telephone: "1234567890",
-      contact_name: "Bob"
+      telephone: "1234567890"
     },
     {
       id: 2,
