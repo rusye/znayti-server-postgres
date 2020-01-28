@@ -138,7 +138,10 @@ function makeZnaytiArrays() {
     deleted_on: null,
     hours: findObject(testHours, business.id),
     a_id: business.address_id,
-    c_id: business.category_id
+    c_id: business.category_id,
+    ...(business.contact_name
+      ? { contact_name: business.contact_name }
+      : { contact_name: null })
   });
 
   return {
