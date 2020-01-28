@@ -161,6 +161,58 @@ describe("Addresses Endpoints", () => {
       });
       }
     );
+
+    context("Zipcode validation", () => {
+      const newAddress = {
+        street: "123 Main St.",
+        city: "Portland",
+        state: "OR",
+        zipcode: "97236",
+        longitude: -122.6786824,
+        latitude: 45.5187539
+      };
+
+      it("Responds with 400 zipcode is too short", () => {
+        newAddress.zipcode = newAddress.zipcode.slice(0, -1);
+
+        return supertest(app)
+          .post("/api/addresses/")
+          .send(newAddress)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message: "zipcode is too short, must have a length of 5 digits"
+            }
+          });
+      });
+
+      it("Responds with 400 zipcode must be numeric", () => {
+        newAddress.zipcode = "asdfg";
+
+        return supertest(app)
+          .post("/api/addresses/")
+          .send(newAddress)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message: "request param zipcode must be numeric"
+            }
     });
   });
 
+      it("Responds with 400 zipcode is too long", () => {
+        newAddress.zipcode += "5";
+
+        return supertest(app)
+          .post("/api/addresses/")
+          .send(newAddress)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message: "zipcode is too long, must have a length of 5 digits"
+            }
+          });
+      });
+    });
+  });
+});
