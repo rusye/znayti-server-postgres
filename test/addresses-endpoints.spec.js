@@ -240,5 +240,28 @@ describe("Addresses Endpoints", () => {
           });
       });
     });
+
+    it(`Responds with 400 'state' is too long`, () => {
+      const newAddress = {
+        street: "123 Main St.",
+        city: "Portland",
+        suite: "303",
+        state: "ORRR",
+        zipcode: "97236",
+        longitude: -122.6786824,
+        latitude: 45.5187539
+      };
+
+      return supertest(app)
+        .post("/api/addresses/")
+        .send(newAddress)
+        .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+        .expect(400, {
+          error: {
+            message:
+              "'state' is too long, must be an abbreviation of state, ex Oregon would be OR"
+          }
+        });
+    });
   });
 });
