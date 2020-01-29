@@ -139,15 +139,20 @@ describe("Addresses Endpoints", () => {
   });
 
   describe("POST /api/addresses", () => {
+    const address = {
+      street: "123 Main St.",
+      suite: "303",
+      city: "Portland",
+      state: "OR",
+      zipcode: "97236",
+      longitude: -122.6786824,
+      latitude: 45.5187539
+    };
+
     ["street", "city", "state", "zipcode", "longitude", "latitude"].forEach(
       field => {
         const newAddress = {
-          street: "123 Main St.",
-          city: "Portland",
-          state: "OR",
-          zipcode: "97236",
-          longitude: -122.6786824,
-          latitude: 45.5187539
+          ...address
         };
 
         it(`Responds with 400 missing '${field}' if not supplied`, () => {
@@ -217,13 +222,7 @@ describe("Addresses Endpoints", () => {
 
     ["street", "city", "suite"].forEach(field => {
       const newAddress = {
-        street: "123 Main St.",
-        city: "Portland",
-        suite: "303",
-        state: "OR",
-        zipcode: "97236",
-        longitude: -122.6786824,
-        latitude: 45.5187539
+        ...address
       };
 
       it(`Responds with 400 '${field}' is too long`, () => {
@@ -243,13 +242,8 @@ describe("Addresses Endpoints", () => {
 
     it(`Responds with 400 'state' is too long`, () => {
       const newAddress = {
-        street: "123 Main St.",
-        city: "Portland",
-        suite: "303",
-        state: "ORRR",
-        zipcode: "97236",
-        longitude: -122.6786824,
-        latitude: 45.5187539
+        ...address,
+        state: "ORRR"
       };
 
       return supertest(app)
