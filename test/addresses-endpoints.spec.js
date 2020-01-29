@@ -96,17 +96,17 @@ describe("Addresses Endpoints", () => {
 
       context("Removes XSS content from results", () => {
         before("Insert a malicious address", () => {
-        return db.into("address").insert([maliciousAddress]);
-      });
+          return db.into("address").insert([maliciousAddress]);
+        });
 
         it("It returns 200 and empty array when trying to find XSS attack address in db", () => {
-        const { street, city, zipcode, suite } = maliciousAddress;
+          const { street, city, zipcode, suite } = maliciousAddress;
 
-        const queryString = Object.entries({ street, city, zipcode, suite })
-          .map(([key, value]) => {
-            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-          })
-          .join("&");
+          const queryString = Object.entries({ street, city, zipcode, suite })
+            .map(([key, value]) => {
+              return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+            })
+            .join("&");
 
           return supertest(app)
             .get(`/api/addresses/?${queryString}`)
@@ -129,36 +129,36 @@ describe("Addresses Endpoints", () => {
             })
             .join("&");
 
-        return supertest(app)
-          .get(`/api/addresses/?${queryString}`)
-          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(200, [expectedMaliciousAddress]);
+          return supertest(app)
+            .get(`/api/addresses/?${queryString}`)
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(200, [expectedMaliciousAddress]);
+        });
       });
     });
   });
-});
 
   describe("POST /api/addresses", () => {
     ["street", "city", "state", "zipcode", "longitude", "latitude"].forEach(
       field => {
-      const newAddress = {
-        street: "123 Main St.",
-        city: "Portland",
-        state: "OR",
-        zipcode: "97236",
-        longitude: -122.6786824,
-        latitude: 45.5187539
-      };
+        const newAddress = {
+          street: "123 Main St.",
+          city: "Portland",
+          state: "OR",
+          zipcode: "97236",
+          longitude: -122.6786824,
+          latitude: 45.5187539
+        };
 
-      it(`Responds with 400 missing '${field}' if not supplied`, () => {
-        delete newAddress[field];
+        it(`Responds with 400 missing '${field}' if not supplied`, () => {
+          delete newAddress[field];
 
-        return supertest(app)
-          .post("/api/addresses/")
-          .send(newAddress)
-          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(400, { error: { message: `'${field}' is required` } });
-      });
+          return supertest(app)
+            .post("/api/addresses/")
+            .send(newAddress)
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(400, { error: { message: `'${field}' is required` } });
+        });
       }
     );
 
@@ -197,8 +197,8 @@ describe("Addresses Endpoints", () => {
             error: {
               message: "request param zipcode must be numeric"
             }
-    });
-  });
+          });
+      });
 
       it("Responds with 400 zipcode is too long", () => {
         newAddress.zipcode += "5";

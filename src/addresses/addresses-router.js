@@ -19,27 +19,27 @@ addressesRouter
   .route("/")
 
   .get((req, res, next) => {
-  for (const param of ["zipcode", "city", "street"]) {
-    if (!req.query[param]) {
-    return res
-      .status(400)
-        .json({ error: { message: `Missing "${param}" in request params` } });
-  }
-  }
+    for (const param of ["zipcode", "city", "street"]) {
+      if (!req.query[param]) {
+        return res
+          .status(400)
+          .json({ error: { message: `Missing "${param}" in request params` } });
+      }
+    }
 
-  const { zipcode, city, street, suite = null } = req.query;
+    const { zipcode, city, street, suite = null } = req.query;
 
-  AddressesService.getAllAddresses(
-    req.app.get("db"),
-    zipcode,
-    xss(city),
-    xss(street),
-    suite
-  )
-    .then(addresses => {
-      res.json(addresses.map(serializeAddress));
-    })
-    .catch(next);
+    AddressesService.getAllAddresses(
+      req.app.get("db"),
+      zipcode,
+      xss(city),
+      xss(street),
+      suite
+    )
+      .then(addresses => {
+        res.json(addresses.map(serializeAddress));
+      })
+      .catch(next);
   })
 
   .post(bodyParser, (req, res, next) => {
@@ -86,7 +86,7 @@ addressesRouter
             zipcode.length < 5 ? "short" : "long"
           }, must have a length of 5 digits`
         }
-});
+      });
     }
 
     if (isNaN(zipcode)) {
