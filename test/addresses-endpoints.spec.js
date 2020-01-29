@@ -214,5 +214,31 @@ describe("Addresses Endpoints", () => {
           });
       });
     });
+
+    ["street", "city", "suite"].forEach(field => {
+      const newAddress = {
+        street: "123 Main St.",
+        city: "Portland",
+        suite: "303",
+        state: "OR",
+        zipcode: "97236",
+        longitude: -122.6786824,
+        latitude: 45.5187539
+      };
+
+      it(`Responds with 400 '${field}' is too long`, () => {
+        newAddress[field] = "x".repeat(51);
+
+        return supertest(app)
+          .post("/api/addresses/")
+          .send(newAddress)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message: `'${field}' is too long, must be max length of 50 for city and street and 10 for suite`
+            }
+          });
+      });
+    });
   });
 });
