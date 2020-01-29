@@ -96,6 +96,20 @@ addressesRouter
         }
       });
     }
+
+    for (const field of ["street", "city", "suite"]) {
+      if (
+        newAddress[field].length > 50 ||
+        (newAddress[field] === "suite" && newAddress.suite.length > 10)
+      ) {
+        logger.error(`${field} is too long`);
+        return res.status(400).send({
+          error: {
+            message: `'${field}' is too long, must be max length of 50 for city and street and 10 for suite`
+          }
+        });
+      }
+    }
   });
 
 module.exports = addressesRouter;
