@@ -117,6 +117,16 @@ addressesRouter
         }
       });
     }
+
+    if (newAddress.state.length > 2) {
+      logger.error("'state' is too long");
+      return res.status(400).send({
+        error: {
+          message:
+            "'state' is too long, must be an abbreviation of state, ex Oregon would be OR"
+        }
+      });
+    }
   });
 
 module.exports = addressesRouter;
