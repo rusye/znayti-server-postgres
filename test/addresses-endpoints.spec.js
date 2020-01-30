@@ -240,7 +240,7 @@ describe("Addresses Endpoints", () => {
       });
     });
 
-    it(`Responds with 400 'state' is too long`, () => {
+    it("Responds with 400 'state' is too long", () => {
       const newAddress = {
         ...address,
         state: "ORRR"
@@ -256,6 +256,45 @@ describe("Addresses Endpoints", () => {
               "'state' is too long, must be an abbreviation of state, ex Oregon would be OR"
           }
         });
+    });
+
+    ["-181", "181"].forEach(value => {
+      const newAddress = {
+        ...address,
+        longitude: value
+      };
+
+      it("Responds with 400 'longitude' is out of range", () => {
+        return supertest(app)
+          .post("/api/addresses/")
+          .send(newAddress)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message:
+                "'longitude' is out of range, must be between -180 and 180"
+            }
+          });
+      });
+    });
+
+    ["-91", "91"].forEach(value => {
+      const newAddress = {
+        ...address,
+        latitude: value
+      };
+
+      it("Responds with 400 'latitude' is out of range", () => {
+        return supertest(app)
+          .post("/api/addresses/")
+          .send(newAddress)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message: "'latitude' is out of range, must be between -90 and 90"
+            }
+          });
+      });
     });
   });
 });
