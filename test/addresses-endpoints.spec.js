@@ -139,20 +139,10 @@ describe("Addresses Endpoints", () => {
   });
 
   describe("POST /api/addresses", () => {
-    const address = {
-      street: "123 Main St.",
-      suite: "303",
-      city: "Portland",
-      state: "OR",
-      zipcode: "97236",
-      longitude: -122.6786824,
-      latitude: 45.5187539
-    };
-
     ["street", "city", "state", "zipcode", "longitude", "latitude"].forEach(
       field => {
         const newAddress = {
-          ...address
+          ...testAddresses[0]
         };
 
         it(`Responds with 400 missing '${field}' if not supplied`, () => {
@@ -169,12 +159,7 @@ describe("Addresses Endpoints", () => {
 
     context("Zipcode validation", () => {
       const newAddress = {
-        street: "123 Main St.",
-        city: "Portland",
-        state: "OR",
-        zipcode: "97236",
-        longitude: -122.6786824,
-        latitude: 45.5187539
+        ...testAddresses[0]
       };
 
       it("Responds with 400 zipcode is too short", () => {
@@ -222,7 +207,7 @@ describe("Addresses Endpoints", () => {
 
     ["street", "city", "suite"].forEach(field => {
       const newAddress = {
-        ...address
+        ...testAddresses[0]
       };
 
       it(`Responds with 400 '${field}' is too long`, () => {
@@ -242,7 +227,7 @@ describe("Addresses Endpoints", () => {
 
     it("Responds with 400 'state' is too long", () => {
       const newAddress = {
-        ...address,
+        ...testAddresses[0],
         state: "ORRR"
       };
 
@@ -260,7 +245,7 @@ describe("Addresses Endpoints", () => {
 
     ["-181", "181"].forEach(value => {
       const newAddress = {
-        ...address,
+        ...testAddresses[0],
         longitude: value
       };
 
@@ -280,7 +265,7 @@ describe("Addresses Endpoints", () => {
 
     ["-91", "91"].forEach(value => {
       const newAddress = {
-        ...address,
+        ...testAddresses[0],
         latitude: value
       };
 
