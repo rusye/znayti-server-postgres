@@ -1,6 +1,7 @@
 "use strict";
 
 const express = require("express");
+const path = require("path");
 const xss = require("xss");
 const bodyParser = express.json();
 const logger = require("../logger");
@@ -145,6 +146,16 @@ addressesRouter
         }
       });
     }
+
+    AddressesService.insertAddress(req.app.get("db"), newAddress)
+      .then(address => {
+        logger.info(`Address with id ${address.id} created`);
+        res
+          .status(201)
+          .location(path.posix.join(req.originalUrl, `${address.id}`))
+          .json(address);
+      })
+      .catch(next);
   });
 
 module.exports = addressesRouter;

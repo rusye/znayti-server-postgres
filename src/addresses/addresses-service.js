@@ -4,6 +4,15 @@ const AddressesService = {
       .select("*")
       .from("address")
       .where({ zipcode, city, street, suite });
+  },
+  insertAddress(knex, newAddress) {
+    return knex
+      .insert(newAddress)
+      .into("address")
+      .returning("*")
+      .then(rows => {
+        return rows[0];
+      });
   }
 };
 
