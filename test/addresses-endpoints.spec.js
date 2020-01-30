@@ -281,5 +281,21 @@ describe("Addresses Endpoints", () => {
           });
       });
     });
+
+    it("Add's a new address to the store", () => {
+      const expectedAddress = {
+        ...testAddresses[0]
+      };
+
+      return supertest(app)
+        .post("/api/addresses/")
+        .send(testAddresses[0])
+        .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+        .expect(201)
+        .expect(res => {
+          expectedAddress.id = res.body.id;
+          expect(res.body).to.eql(expectedAddress);
+        });
+    });
   });
 });
