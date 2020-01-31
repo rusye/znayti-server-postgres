@@ -139,117 +139,99 @@ describe("Addresses Endpoints", () => {
   });
 
   describe("POST /api/addresses", () => {
-    ["street", "city", "state", "zipcode", "longitude", "latitude"].forEach(
-      field => {
+    context("Given no addresses", () => {
+      ["street", "city", "state", "zipcode", "longitude", "latitude"].forEach(
+        field => {
+          const newAddress = {
+            ...testAddresses[0]
+          };
+
+          it(`Responds with 400 missing '${field}' if not supplied`, () => {
+            delete newAddress[field];
+
+            return supertest(app)
+              .post("/api/addresses/")
+              .send(newAddress)
+              .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+              .expect(400, { error: { message: `'${field}' is required` } });
+          });
+        }
+      );
+
+      context("Zipcode validation", () => {
         const newAddress = {
           ...testAddresses[0]
         };
 
-        it(`Responds with 400 missing '${field}' if not supplied`, () => {
-          delete newAddress[field];
+        it("Responds with 400 zipcode is too short", () => {
+          newAddress.zipcode = newAddress.zipcode.slice(0, -1);
 
           return supertest(app)
             .post("/api/addresses/")
             .send(newAddress)
             .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-            .expect(400, { error: { message: `'${field}' is required` } });
+            .expect(400, {
+              error: {
+                message: "zipcode is too short, must have a length of 5 digits"
+              }
+            });
         });
-      }
-    );
 
-    context("Zipcode validation", () => {
-      const newAddress = {
-        ...testAddresses[0]
-      };
+        it("Responds with 400 zipcode must be numeric", () => {
+          newAddress.zipcode = "asdfg";
 
-      it("Responds with 400 zipcode is too short", () => {
-        newAddress.zipcode = newAddress.zipcode.slice(0, -1);
-
-        return supertest(app)
-          .post("/api/addresses/")
-          .send(newAddress)
-          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(400, {
-            error: {
-              message: "zipcode is too short, must have a length of 5 digits"
-            }
-          });
-      });
-
-      it("Responds with 400 zipcode must be numeric", () => {
-        newAddress.zipcode = "asdfg";
-
-        return supertest(app)
-          .post("/api/addresses/")
-          .send(newAddress)
-          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(400, {
-            error: {
-              message: "request param zipcode must be numeric"
-            }
-          });
-      });
-
-      it("Responds with 400 zipcode is too long", () => {
-        newAddress.zipcode += "5";
-
-        return supertest(app)
-          .post("/api/addresses/")
-          .send(newAddress)
-          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(400, {
-            error: {
-              message: "zipcode is too long, must have a length of 5 digits"
-            }
-          });
-      });
-    });
-
-    ["street", "city", "suite"].forEach(field => {
-      const newAddress = {
-        ...testAddresses[0]
-      };
-
-      it(`Responds with 400 '${field}' is too long`, () => {
-        newAddress[field] = "x".repeat(51);
-
-        return supertest(app)
-          .post("/api/addresses/")
-          .send(newAddress)
-          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(400, {
-            error: {
-              message: `'${field}' is too long, must be max length of 50 for city and street and 10 for suite`
-            }
-          });
-      });
-    });
-
-    it("Responds with 400 'state' is too long", () => {
-      const newAddress = {
-        ...testAddresses[0],
-        state: "ORRR"
-      };
-
-      return supertest(app)
-        .post("/api/addresses/")
-        .send(newAddress)
-        .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-        .expect(400, {
-          error: {
-            message:
-              "'state' is too long, must be an abbreviation of state, ex Oregon would be OR"
-          }
+          return supertest(app)
+            .post("/api/addresses/")
+            .send(newAddress)
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(400, {
+              error: {
+                message: "request param zipcode must be numeric"
+              }
+            });
         });
-    });
 
-    ["-181", "181"].forEach(value => {
-      const newAddress = {
-        ...testAddresses[0],
-        longitude: value
-      };
+        it("Responds with 400 zipcode is too long", () => {
+          newAddress.zipcode += "5";
 
-      it("Responds with 400 'longitude' is out of range", () => {
+          return supertest(app)
+            .post("/api/addresses/")
+            .send(newAddress)
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(400, {
+              error: {
+                message: "zipcode is too long, must have a length of 5 digits"
+              }
+            });
+        });
+      });
+
+      ["street", "city", "suite"].forEach(field => {
+        const newAddress = {
+          ...testAddresses[0]
+        };
+
+        it(`Responds with 400 '${field}' is too long`, () => {
+          newAddress[field] = "x".repeat(51);
+
+          return supertest(app)
+            .post("/api/addresses/")
+            .send(newAddress)
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(400, {
+              error: {
+                message: `'${field}' is too long, must be max length of 50 for city and street and 10 for suite`
+              }
+            });
+        });
+      });
+
+      it("Responds with 400 'state' is too long", () => {
+        const newAddress = {
+          ...testAddresses[0],
+          state: "ORRR"
+        };
+
         return supertest(app)
           .post("/api/addresses/")
           .send(newAddress)
@@ -257,45 +239,66 @@ describe("Addresses Endpoints", () => {
           .expect(400, {
             error: {
               message:
-                "'longitude' is out of range, must be between -180 and 180"
+                "'state' is too long, must be an abbreviation of state, ex Oregon would be OR"
             }
           });
       });
-    });
 
-    ["-91", "91"].forEach(value => {
-      const newAddress = {
-        ...testAddresses[0],
-        latitude: value
-      };
+      ["-181", "181"].forEach(value => {
+        const newAddress = {
+          ...testAddresses[0],
+          longitude: value
+        };
 
-      it("Responds with 400 'latitude' is out of range", () => {
+        it("Responds with 400 'longitude' is out of range", () => {
+          return supertest(app)
+            .post("/api/addresses/")
+            .send(newAddress)
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(400, {
+              error: {
+                message:
+                  "'longitude' is out of range, must be between -180 and 180"
+              }
+            });
+        });
+      });
+
+      ["-91", "91"].forEach(value => {
+        const newAddress = {
+          ...testAddresses[0],
+          latitude: value
+        };
+
+        it("Responds with 400 'latitude' is out of range", () => {
+          return supertest(app)
+            .post("/api/addresses/")
+            .send(newAddress)
+            .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+            .expect(400, {
+              error: {
+                message:
+                  "'latitude' is out of range, must be between -90 and 90"
+              }
+            });
+        });
+      });
+
+      it("Add's a new address to the store", () => {
+        const expectedAddress = {
+          ...testAddresses[0]
+        };
+
         return supertest(app)
           .post("/api/addresses/")
-          .send(newAddress)
+          .send(testAddresses[0])
           .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-          .expect(400, {
-            error: {
-              message: "'latitude' is out of range, must be between -90 and 90"
-            }
+          .expect(201)
+          .expect(res => {
+            expectedAddress.id = res.body.id;
+            expect(res.body).to.eql(expectedAddress);
           });
       });
-    });
-
-    it("Add's a new address to the store", () => {
-      const expectedAddress = {
-        ...testAddresses[0]
-      };
-
-      return supertest(app)
-        .post("/api/addresses/")
-        .send(testAddresses[0])
-        .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
-        .expect(201)
-        .expect(res => {
-          expectedAddress.id = res.body.id;
-          expect(res.body).to.eql(expectedAddress);
-        });
     });
   });
 });
