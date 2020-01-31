@@ -1,5 +1,5 @@
 const AddressesService = {
-  getAllAddresses(knex, zipcode, city, street, suite) {
+  getAllAddresses(knex, zipcode, city, street, suite = null) {
     return knex
       .select("*")
       .from("address")
