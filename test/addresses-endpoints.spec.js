@@ -334,6 +334,28 @@ describe("Addresses Endpoints", () => {
             }
           });
       });
+
+      it("Add's a new address to the store", () => {
+        const newAddress = {
+          street: "456 Main St.",
+          city: "Portland",
+          state: "OR",
+          zipcode: "97236",
+          longitude: -122.6786924,
+          latitude: 45.5117539
+        };
+
+        return supertest(app)
+          .post("/api/addresses/")
+          .send(newAddress)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(201)
+          .expect(res => {
+            newAddress.id = res.body.id;
+            newAddress.suite ? undefined : (newAddress.suite = null);
+            expect(res.body).to.eql(newAddress);
+          });
+      });
     });
   });
 });
