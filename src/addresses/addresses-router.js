@@ -153,7 +153,7 @@ addressesRouter
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `${address.id}`))
-          .json(address);
+          .json(serializeAddress(address));
       })
       .catch(next);
   });
