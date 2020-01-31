@@ -317,3 +317,23 @@ describe("Addresses Endpoints", () => {
           });
       });
     });
+
+    context("Given there are addresses in the database", () => {
+      beforeEach("Insert addresses", () => {
+        return db.into("address").insert(testAddresses);
+      });
+
+      it("Responds with 400 address already exists", () => {
+        return supertest(app)
+          .post("/api/addresses/")
+          .send(testAddresses[0])
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(400, {
+            error: {
+              message: "address already exists"
+            }
+          });
+      });
+    });
+  });
+});
