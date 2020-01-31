@@ -147,13 +147,32 @@ addressesRouter
       });
     }
 
-    AddressesService.insertAddress(req.app.get("db"), newAddress)
-      .then(address => {
-        logger.info(`Address with id ${address.id} created`);
-        res
-          .status(201)
-          .location(path.posix.join(req.originalUrl, `${address.id}`))
-          .json(serializeAddress(address));
+    AddressesService.getAllAddresses(
+      req.app.get("db"),
+      zipcode,
+      xss(city),
+      xss(street),
+      suite
+    )
+      .then(count => {
+        if (count.length > 0) {
+          logger.error("address already exists");
+          res.status(400).send({
+            error: {
+              message: "address already exists"
+            }
+          });
+        } else {
+          AddressesService.insertAddress(req.app.get("db"), newAddress).then(
+            address => {
+              logger.info(`Address with id ${address.id} created`);
+              res
+                .status(201)
+                .location(path.posix.join(req.originalUrl, `${address.id}`))
+                .json(serializeAddress(address));
+            }
+          );
+        }
       })
       .catch(next);
   });
