@@ -299,6 +299,21 @@ describe("Addresses Endpoints", () => {
             expect(res.body).to.eql(expectedAddress);
           });
       });
+
+      it("Removes XSS attack content from response", () => {
+        const {
+          maliciousAddress,
+          expectedMaliciousAddress
+        } = fixtures.makeMaliciousBusiness();
+
+        return supertest(app)
+          .post("/api/addresses/")
+          .send(maliciousAddress)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(201)
+          .expect(res => {
+            expectedMaliciousAddress.id = res.body.id;
+            expect(res.body).to.eql(expectedMaliciousAddress);
+          });
+      });
     });
-  });
-});
