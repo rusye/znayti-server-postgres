@@ -191,8 +191,15 @@ addressesRouter
             .status(404)
             .json({ error: { message: "Address Not Found" } });
         }
+
+        res.address = address;
+        next();
       })
       .catch(next);
+  })
+
+  .get((req, res) => {
+    res.json(serializeAddress(res.address));
   });
 
 module.exports = addressesRouter;
