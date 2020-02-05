@@ -177,4 +177,22 @@ addressesRouter
       .catch(next);
   });
 
+addressesRouter
+  .route("/:id")
+
+  .all((req, res, next) => {
+    const { id } = req.params;
+
+    AddressesService.getById(req.app.get("db"), id)
+      .then(address => {
+        if (!address) {
+          logger.error(`Address with id ${id} not found`);
+          return res
+            .status(404)
+            .json({ error: { message: "Address Not Found" } });
+        }
+      })
+      .catch(next);
+  });
+
 module.exports = addressesRouter;

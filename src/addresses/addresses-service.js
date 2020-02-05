@@ -13,6 +13,13 @@ const AddressesService = {
       .then(rows => {
         return rows[0];
       });
+  },
+  getById(knex, id) {
+    return knex
+      .select("*")
+      .from("address")
+      .where({ id })
+      .first();
   }
 };
 
