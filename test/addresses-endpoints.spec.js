@@ -358,4 +358,15 @@ describe("Addresses Endpoints", () => {
       });
     });
   });
+
+  describe("GET /api/addresses/:id", () => {
+    context("Given no address", () => {
+      it("Responds with 404 when the address doesn't exist", () => {
+        return supertest(app)
+          .get("/api/addresses/1")
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(404, { error: { message: "Address Not Found" } });
+      });
+    });
+  });
 });
