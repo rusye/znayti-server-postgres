@@ -368,5 +368,28 @@ describe("Addresses Endpoints", () => {
           .expect(404, { error: { message: "Address Not Found" } });
       });
     });
+
+    context("Given there are addresses in the database", () => {
+      beforeEach("Insert addresses", () => {
+        return db.into("address").insert(testAddresses);
+      });
+
+      it("Responds with 200 and the specified address", () => {
+        const id = testAddresses[3].id;
+
+        const expectedAddress = testAddresses.find(
+          address => address.id === id
+        );
+
+        return supertest(app)
+          .get(`/api/addresses/${id}`)
+          .set("Authorization", `Bearer ${process.env.API_TOKEN}`)
+          .expect(200)
+          .expect(res => {
+            expectedAddress.suite ? undefined : (expectedAddress.suite = null);
+            expect(res.body).to.eql(expectedAddress);
+          });
+      });
+    });
   });
 });
