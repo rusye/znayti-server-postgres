@@ -318,7 +318,7 @@ describe("Businesses Endpoints", () => {
       });
 
       it("Responds with 200 and the specified business", () => {
-        const business_visual_id = "new-business-2-789012";
+        const business_visual_id = testBusinesses[1].visual_id;
 
         const expectedBusinessesResult = testBusinesses
           .filter(business => business.visual_id === business_visual_id)
@@ -348,7 +348,7 @@ describe("Businesses Endpoints", () => {
       });
 
       it("Responds with 400 when no required fields are supplied", () => {
-        const businessToUpdate = "new-business-2-789012";
+        const businessToUpdate = testBusinesses[1].visual_id;
 
         return supertest(app)
           .patch(`/api/businesses/${businessToUpdate}`)
@@ -363,7 +363,7 @@ describe("Businesses Endpoints", () => {
       });
 
       it("Responds with 400 invalid 'url' if not a valid url", () => {
-        const businessToUpdate = "new-business-2-789012";
+        const businessToUpdate = testBusinesses[1].visual_id;
 
         const wrongGooglePlace = {
           google_place: "htp:/somebadplace.ce"
@@ -379,7 +379,7 @@ describe("Businesses Endpoints", () => {
       });
 
       it("Responds with 400 invalid 'telephone' if the telephone format isn't correct", () => {
-        const businessToUpdate = "new-business-2-789012";
+        const businessToUpdate = testBusinesses[1].visual_id;
 
         const wrongTelephone = {
           telephone: "123-456-7890"
@@ -397,7 +397,7 @@ describe("Businesses Endpoints", () => {
       });
 
       it("Responds with 204 and updates the business", () => {
-        const businessToUpdate = "new-business-2-789012";
+        const businessToUpdate = testBusinesses[1].visual_id;
 
         const updatedBusiness = {
           business_name: "Updated Business 1",
@@ -437,7 +437,7 @@ describe("Businesses Endpoints", () => {
       });
 
       it("Responds with 204 when updating only a subset of fields", () => {
-        const businessToUpdate = "new-business-2-789012";
+        const businessToUpdate = testBusinesses[1].visual_id;
 
         const updatedBusiness = {
           google_place: "https://maps.google.com/?cid=89996"
@@ -487,7 +487,7 @@ describe("Businesses Endpoints", () => {
       });
 
       it("Removes the business by visual_id from the database", () => {
-        const business_visual_id = "new-business-2-789012";
+        const business_visual_id = testBusinesses[1].visual_id;
 
         const expectedBusinessesResult = testBusinesses
           .filter(
