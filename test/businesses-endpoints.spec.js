@@ -116,11 +116,11 @@ describe("Businesses Endpoints", () => {
     context("Given there are businesses in the database", () => {
       beforeEach("insert categories, addresses, hours, and businesses", () => {
         return testInsertions();
-          });
+      });
 
       const expectedBusinessesResult = [
         testBusinesses
-        .filter(business => business.id !== 3)
+          .filter(business => business.id !== 3)
           .map(testBusinessesSerilize),
         expectedCategoryCount
       ];
@@ -162,12 +162,12 @@ describe("Businesses Endpoints", () => {
 
       const expectedBusiness = [
         {
-        ...expectedMaliciousCategory,
-        ...expectedMaliciousAddress,
-        ...expectedMaliciousBusiness,
+          ...expectedMaliciousCategory,
+          ...expectedMaliciousAddress,
+          ...expectedMaliciousBusiness,
           c_id: maliciousBusiness.category_id,
           a_id: maliciousBusiness.address_id,
-        hours: [null]
+          hours: [null]
         }
       ];
 
@@ -442,7 +442,7 @@ describe("Businesses Endpoints", () => {
         const updatedBusiness = {
           google_place: "https://maps.google.com/?cid=89996"
         };
-        
+
         const businessBeforeUpdate = testBusinesses
           .filter(business => business.visual_id === businessToUpdate)
           .map(testBusinessesSerilize);

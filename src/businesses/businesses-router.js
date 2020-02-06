@@ -56,7 +56,7 @@ businessesRouter
         for (let i = 0; i < businesses.length; i++) {
           distinctCount[businesses[i].category_name] =
             (distinctCount[businesses[i].category_name] || 0) + 1;
-          }
+        }
 
         const distinctCountArray = [];
 
