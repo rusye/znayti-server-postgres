@@ -92,23 +92,7 @@ businessesRouter
       telephone
     };
 
-    for (const field of [
-      "visual_id",
-      "business_name",
-      "category_id",
-      "address_id",
-      "google_place",
-      "telephone"
-    ]) {
-      if (!newBusiness[field]) {
-        logger.error(`${field} is required`);
-        return res.status(400).send({
-          error: { message: `'${field}' is required` }
-        });
-      }
-    }
-
-    const error = getBusinessValidationError(newBusiness);
+    const error = getBusinessValidationError(newBusiness, "POST");
 
     if (error) return res.status(400).send(error);
 
@@ -166,19 +150,7 @@ businessesRouter
       telephone
     };
 
-    const numberOfValues = Object.values(businessToUpdate).filter(Boolean)
-      .length;
-    if (numberOfValues === 0) {
-      logger.error("Invalid update without required fields");
-      return res.status(400).json({
-        error: {
-          message:
-            "Request body must contain either 'business_name', 'contact_name', 'category_id', 'address_id', 'google_place' or 'telephone'"
-        }
-      });
-    }
-
-    const error = getBusinessValidationError(businessToUpdate);
+    const error = getBusinessValidationError(businessToUpdate, "PATCH");
 
     if (error) return res.status(400).send(error);
 
