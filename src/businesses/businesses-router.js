@@ -5,9 +5,9 @@ const path = require("path");
 const xss = require("xss");
 const logger = require("../logger");
 const bodyParser = express.json();
-const { getBusinessValidationError } = require("./businesses-validator");
 
 const BusinessesService = require("./businesses-service");
+const { businessValidationError } = require("./businesses-validator");
 
 const businessesRouter = express.Router();
 
@@ -92,7 +92,7 @@ businessesRouter
       telephone
     };
 
-    const error = getBusinessValidationError(newBusiness, "POST");
+    const error = businessValidationError(newBusiness, "POST");
 
     if (error) return res.status(400).send(error);
 
@@ -150,7 +150,7 @@ businessesRouter
       telephone
     };
 
-    const error = getBusinessValidationError(businessToUpdate, "PATCH");
+    const error = businessValidationError(businessToUpdate, "PATCH");
 
     if (error) return res.status(400).send(error);
 

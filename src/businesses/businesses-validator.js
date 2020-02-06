@@ -3,7 +3,7 @@ const logger = require("../logger");
 
 const NO_ERRORS = null;
 
-function getBusinessValidationError(business, HTTPMethod) {
+function businessValidationError(business, HTTPMethod) {
   const { google_place, telephone } = business;
 
   if (HTTPMethod === "POST") {
@@ -64,5 +64,5 @@ function getBusinessValidationError(business, HTTPMethod) {
 }
 
 module.exports = {
-  getBusinessValidationError
+  businessValidationError
 };
