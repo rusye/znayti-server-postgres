@@ -1,7 +1,8 @@
 {
   "name": "znayti-server-postgres",
   "version": "1.0.0",
-  "description": "",
+  "private": true,
+  "description": "The postgres version of Znayti",
   "main": "index.js",
   "scripts": {
     "test": "mocha --require test/setup.js",
@@ -29,8 +30,8 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.2.2",
-    "nodemon": "^1.19.4",
+    "mocha": "^7.1.2",
+    "nodemon": "^2.0.3",
     "postgrator-cli": "^3.2.0",
     "supertest": "^4.0.2"
   }
